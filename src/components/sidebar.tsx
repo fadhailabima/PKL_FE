@@ -1,6 +1,6 @@
 "use client";
-
 import React, { useState } from "react";
+import Link from "next/link";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,47 +12,23 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
+import { usePathname, useRouter } from "next/navigation";
 import { SIDENAV_ITEMS } from "@/constants";
 import { SideNavItem } from "@/types";
 import { Icon } from "@iconify/react";
+import { logout } from "@/services/auth";
+import { Button } from "./ui/button";
 
-const Sidebar = () => {
-  return (
-    <div className="md:w-60 bg-white h-screen flex-1 fixed border-r border-zinc-200 hidden md:flex">
-      <div className="flex flex-col space-y-6 w-full">
-        <Link
-          href="/dashboard"
-          className="flex flex-row space-x-3 items-center justify-center md:justify-start md:px-6 border-b border-zinc-200 h-14 w-full"
-        >
-          <Icon
-            icon="iconamoon:profile-fill"
-            className="h-9 w-9 flex items-center justify-center text-center"
-          />
-          <span className="font-semibold text-base">Bima</span>
-        </Link>
-
-        <div className="flex flex-col space-y-2  md:px-6 ">
-          {SIDENAV_ITEMS.map((item, idx) => {
-            return <MenuItem key={idx} item={item} />;
-          })}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default Sidebar;
-
+// Menuitem dapat diambil di luar fungsi agar bisa digunakan di luar komponen
 const MenuItem = ({ item }: { item: SideNavItem }) => {
   const pathname = usePathname();
   const [subMenuOpen, setSubMenuOpen] = useState(false);
+
   const toggleSubMenu = () => {
     setSubMenuOpen(!subMenuOpen);
   };
 
+  // Perhatikan bahwa fungsi ini harus mengembalikan JSX
   return (
     <div className="">
       {item.submenu ? (
@@ -75,33 +51,117 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
 
           {subMenuOpen && (
             <div className="my-2 ml-12 flex flex-col space-y-4">
-              {item.subMenuItems?.map((subItem, idx) => {
-                return (
-                  <Link
-                    key={idx}
-                    href={subItem.path}
-                    className={`${
-                      subItem.path === pathname ? "font-bold" : ""
-                    }`}
-                  >
-                    <span>{subItem.title}</span>
-                  </Link>
-                );
-              })}
+              {item.subMenuItems?.map((subItem, idx) => (
+                <Link
+                  key={idx}
+                  href={subItem.path}
+                  className={`${subItem.path === pathname ? "font-bold" : ""}`}
+                >
+                  <span>{subItem.title}</span>
+                </Link>
+              ))}
             </div>
           )}
         </>
-      ) : (
-        <Link
-          href={item.path}
-          className={`flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100 ${
-            item.path === pathname ? "bg-zinc-100" : ""
-          }`}
-        >
-          {item.icon}
-          <span className="font-semibold text-xl flex">{item.title}</span>
-        </Link>
-      )}
+      ) : null}
     </div>
   );
 };
+
+// Komponen Sidebar yang diekspor sebagai default
+export default function Sidebar() {
+  const router = useRouter();
+  const handleDialogContinue = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    try {
+      // Retrieve the token from local storage
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        // Handle case where token is not available
+        console.error("Token not found in local storage");
+        return;
+      }
+
+      // Call logout function with the retrieved token
+      const res = await logout(token);
+
+      if (res) {
+        console.log("Logout successful");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        router.push("/");
+      }
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
+
+  return (
+    <div className="md:w-60 bg-white h-screen flex-1 fixed border-r border-zinc-200 hidden md:flex">
+      <div className="flex flex-col space-y-6 w-full">
+        <Link
+          href="/dashboard"
+          className="flex flex-row space-x-3 items-center justify-center md:justify-start md:px-6 border-b border-zinc-200 h-14 w-full"
+        >
+          <Icon
+            icon="iconamoon:profile-fill"
+            className="h-9 w-9 flex items-center justify-center text-center"
+          />
+          <span className="font-semibold text-base">Bima</span>
+        </Link>
+        <div className="flex flex-col space-y-5  md:px-4 ">
+          <Link
+            href="/dashboard"
+            className="flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100"
+          >
+            <Icon icon="lucide:home" width="24" height="24" />
+            <span className="font-semibold text-xl flex">Home</span>
+          </Link>
+          {SIDENAV_ITEMS.map((item, idx) => (
+            <MenuItem key={idx} item={item} />
+          ))}
+          <Link
+            href="/Messages"
+            className="flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100"
+          >
+            <Icon icon="lucide:mail" width="24" height="24" />
+            <span className="font-semibold text-xl flex">Messages</span>
+          </Link>
+          <div className="flex flex-col space-y-9 w-full">
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="flex flex-row space-x-2 items-center p-2 rounded-lg hover:bg-zinc-100"
+                >
+                  <Icon
+                    icon="lucide:arrow-left-square"
+                    width="24"
+                    height="24"
+                  />
+                  <span className="font-semibold text-xl flex">Logout</span>
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your account and remove your data from our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDialogContinue}>
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

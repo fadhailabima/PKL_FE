@@ -2,11 +2,11 @@ import { Icon } from "@iconify/react";
 import { SideNavItem } from "./types";
 
 export const SIDENAV_ITEMS: SideNavItem[] = [
-  {
-    title: "Home",
-    path: "/dashboard",
-    icon: <Icon icon="lucide:home" width="24" height="24" />,
-  },
+  // {
+  //   title: "Home",
+  //   path: "/dashboard",
+  //   icon: <Icon icon="lucide:home" width="24" height="24" />,
+  // },
   {
     title: "Projects",
     path: "/projects",
@@ -18,11 +18,11 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
       { title: "Graphic Design", path: "/projects/graphic-design" },
     ],
   },
-  {
-    title: "Messages",
-    path: "/messages",
-    icon: <Icon icon="lucide:mail" width="24" height="24" />,
-  },
+  // {
+  //   title: "Messages",
+  //   path: "/messages",
+  //   icon: <Icon icon="lucide:mail" width="24" height="24" />,
+  // },
   {
     title: "Settings",
     path: "/settings",
@@ -33,9 +33,9 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
       { title: "Privacy", path: "/settings/privacy" },
     ],
   },
-  {
-    title: "Logout",
-    path: "/",
-    icon: <Icon icon="solar:logout-2-bold" width="24" height="24" />,
-  },
+  // {
+  //   title: "Logout",
+  //   path: "/",
+  //   icon: <Icon icon="solar:logout-2-bold" width="24" height="24" />,
+  // },
 ];

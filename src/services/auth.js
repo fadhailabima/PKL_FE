@@ -35,7 +35,11 @@ export const logout = async (token) => {
       throw new Error("Gagal melakukan logout");
     }
   } catch (error) {
-    throw new Error(`Terjadi kesalahan dalam proses logout`);
+    // Include the original error message in the thrown error
+    const errorMessage =
+      error.response?.data?.message ||
+      error.message ||
+      "Terjadi kesalahan dalam proses logout";
+    throw new Error(errorMessage);
   }
 };
-
