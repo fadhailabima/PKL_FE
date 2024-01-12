@@ -1,6 +1,42 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Rak, getRak } from "@/services/rak";
+import { Transaksi, getTransaksi } from "@/services/transaksi";
 
 export default function Dashboard() {
+  const router = useRouter();
+  const [data, setData] = useState<Rak[] | null>(null);
+  const getData = async (token: string) => {
+    const res = await getRak(token);
+    setData(res);
+  };
+
+  console.log(data);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/");
+    } else {
+      getData(token);
+    }
+  }, []);
+
+  const [transaksi, saveData] = useState<Transaksi[] | null>(null);
+  const ambilData = async (token: string) => {
+    const res = await getTransaksi(token);
+    saveData(res);
+  };
+
+  console.log(transaksi);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/");
+    } else {
+      ambilData(token);
+    }
+  }, []);
   return (
     <main className="flex-1 max-h-full p-5">
       {/* Main content header */}
@@ -10,28 +46,27 @@ export default function Dashboard() {
 
       {/* Start Content */}
       <div className="grid grid-cols-1 gap-5 mt-6 sm:grid-cols-2 lg:grid-cols-4">
-        {[...Array(4)].map((_, i) => (
+        {data?.map((item, i) => (
           <div
             key={i}
             className="p-4 transition-shadow border rounded-lg shadow-sm hover:shadow-lg"
           >
             <div className="flex items-start justify-between">
               <div className="flex flex-col space-y-2">
-                <span className="text-gray-400">Total Users</span>
-                <span className="text-lg font-semibold">100,221</span>
+                <span className="text-gray-400">Sisa Kapasitas Rak</span>
+                <span className="text-lg font-semibold">
+                  {item.kapasitas_sisa}
+                </span>
               </div>
-              <div className="p-10 bg-gray-200 rounded-md"></div>
+              <div className="p-10"></div>
             </div>
             <div>
-              <span className="inline-block px-2 text-sm text-white bg-green-300 rounded">
-                14%
-              </span>
-              <span>from 2019</span>
+              <span>{item.idrak}</span>
             </div>
           </div>
         ))}
       </div>
-      <h3 className="mt-6 text-xl">Users</h3>
+      <h3 className="mt-6 text-xl">Transaksi</h3>
       <div className="flex flex-col mt-6">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -41,81 +76,56 @@ export default function Dashboard() {
                   <tr>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                      className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      Name
+                      ID Transaksi
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                      className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      Title
+                      Nama Petugas
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                      className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      Status
+                      Jumlah
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                      className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      Role
+                      Tanggal Transaksi
                     </th>
-                    <th scope="col" className="relative px-6 py-3">
-                      <span className="sr-only">Edit</span>
+                    <th
+                      scope="col"
+                      className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
+                    >
+                      Jenis Transaksi
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {[...Array(10)].map((_, i) => (
+                  {transaksi?.map((produk, i) => (
                     <tr
                       key={i}
                       className="transition-all hover:bg-gray-100 hover:shadow-lg"
                     >
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 w-10 h-10">
-                            <img
-                              className="w-10 h-10 rounded-full"
-                              src="https://avatars0.githubusercontent.com/u/57622665?s=460&u=8f581f4c4acd4c18c33a87b3e6476112325e8b38&v=4"
-                              alt=""
-                            />
-                          </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              Ahmed Kamel
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              ahmed.kamel@example.com
-                            </div>
-                          </div>
-                        </div>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {produk.receiptID}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          Regional Paradigm Technician
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          Optimization
-                        </div>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {produk.karyawan.nama}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">
-                          Active
-                        </span>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {produk.jumlah}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        Admin
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {produk.tanggal_transaksi}
                       </td>
-                      <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                        <a
-                          href="#"
-                          className="text-indigo-600 hover:text-indigo-900"
-                        >
-                          Edit
-                        </a>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {produk.jenis_transaksi}
                       </td>
                     </tr>
                   ))}

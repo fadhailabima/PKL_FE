@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   AlertDialog,
@@ -18,6 +18,7 @@ import { SideNavItem } from "@/types";
 import { Icon } from "@iconify/react";
 import { logout } from "@/services/auth";
 import { Button } from "./ui/button";
+import { Admin, getAdmin } from "@/services/admin";
 
 // Menuitem dapat diambil di luar fungsi agar bisa digunakan di luar komponen
 const MenuItem = ({ item }: { item: SideNavItem }) => {
@@ -97,6 +98,22 @@ export default function Sidebar() {
     }
   };
 
+  const [data, setData] = useState<Admin | null>(null);
+
+  const getData = async (token: string) => {
+    const res = await getAdmin(token);
+    setData(res);
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/");
+    } else {
+      getData(token);
+    }
+  }, []);
+
   return (
     <div className="md:w-60 bg-white h-screen flex-1 fixed border-r border-zinc-200 hidden md:flex">
       <div className="flex flex-col space-y-6 w-full">
@@ -108,7 +125,7 @@ export default function Sidebar() {
             icon="iconamoon:profile-fill"
             className="h-9 w-9 flex items-center justify-center text-center"
           />
-          <span className="font-semibold text-base">Bima</span>
+          <span className="font-semibold text-base">{data?.nama}</span>
         </Link>
         <div className="flex flex-col space-y-5  md:px-4 ">
           <Link
@@ -122,11 +139,11 @@ export default function Sidebar() {
             <MenuItem key={idx} item={item} />
           ))}
           <Link
-            href="/Messages"
+            href="/profile"
             className="flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100"
           >
-            <Icon icon="lucide:mail" width="24" height="24" />
-            <span className="font-semibold text-xl flex">Messages</span>
+            <Icon icon="lucide:user-plus" width="24" height="24" />
+            <span className="font-semibold text-xl flex">Tambah User</span>
           </Link>
           <div className="flex flex-col space-y-9 w-full">
             <AlertDialog>
@@ -145,11 +162,9 @@ export default function Sidebar() {
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    your account and remove your data from our servers.
-                  </AlertDialogDescription>
+                  <AlertDialogTitle>
+                    Apakah anda yakin ingin keluar ?
+                  </AlertDialogTitle>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
