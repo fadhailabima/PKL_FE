@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export type Admin = {
+  idadmin: string;
   nama: string;
   handphone: string;
   status: string;

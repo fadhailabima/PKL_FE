@@ -26,7 +26,6 @@ import {
   TableRow,
   TableCell,
 } from "@nextui-org/react";
-import Link from "next/link";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -88,13 +87,13 @@ export default function Dashboard() {
     e.preventDefault();
     try {
       const res = await showRakSlotByID(token, id);
-      setChoose(res.data); // Ganti setSelected menjadi setChoose
-      router.push("/detail-rak-slot");
+      setChoose(res.data);
+      router.push(`/detail-rak-slot/${id}`);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
+  console.log("ini id rak", choose);
   return (
     <main className="flex-1 max-h-full p-5">
       <div className="flex flex-col items-start justify-between pb-6 space-y-4 border-b lg:items-center lg:space-y-0 lg:flex-row">
@@ -167,7 +166,7 @@ export default function Dashboard() {
                                 onClick={(e) =>
                                   chooseRak(
                                     localStorage.getItem("token")!,
-                                    item.idrak,
+                                    selected?.idrak ?? '',
                                     e
                                   )
                                 }

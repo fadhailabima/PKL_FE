@@ -3,10 +3,27 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { getAdmin, Admin } from "@/services/admin";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function Profile() {
+  const router = useRouter();
+  const [data, setData] = useState<Admin | null>(null);
+
+  const getData = async (token: string) => {
+    const res = await getAdmin(token);
+    setData(res);
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/");
+    } else {
+      getData(token);
+    }
+  }, []);
   return (
     <div className="h-full">
       <div className="border-b-2 block md:flex">
@@ -28,7 +45,7 @@ export default function Profile() {
           </div>
           <div className="pb-8">
             <span className="m-8 border-1 rounded-r px-14 py-2 w-full text-[1.2rem]">
-              bimadharmawan6@gmail.com
+              {data?.idadmin}
             </span>
           </div>
         </div>
@@ -40,7 +57,7 @@ export default function Profile() {
                 Nama
               </label>
               <span className="border-1  rounded-r px-4 py-2 w-full text-[1.2rem]">
-                bimadharmawan6@gmail.com
+                {data?.nama}
               </span>
             </div>
             <div className="pb-4">
@@ -48,7 +65,7 @@ export default function Profile() {
                 Email
               </label>
               <span className="border-1  rounded-r px-4 py-2 w-full text-[1.2rem]">
-                bimadharmawan6@gmail.com
+                {data?.email}
               </span>
             </div>
             <div className="pb-4">
@@ -56,7 +73,7 @@ export default function Profile() {
                 Alamat
               </label>
               <span className="border-1  rounded-r px-4 py-2 w-full  text-[1.2rem]">
-                bimadharmawan6@gmail.com
+                {data?.alamat}
               </span>
             </div>
             <div className="pb-4">
@@ -64,7 +81,15 @@ export default function Profile() {
                 Nomor Telepon
               </label>
               <span className="border-1  rounded-r px-4 py-2 w-full text-[1.2rem]">
-                bimadharmawan6@gmail.com
+                {data?.handphone}
+              </span>
+            </div>
+            <div className="pb-4">
+              <label className="font-semibold text-gray-700 block pb-2">
+                Nomor Telepon
+              </label>
+              <span className="border-1  rounded-r px-4 py-2 w-full text-[1.2rem]">
+                {data?.status}
               </span>
             </div>
           </div>

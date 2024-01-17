@@ -4,29 +4,27 @@ import { useRouter } from "next/navigation";
 import { RakSlot, getRakSlot, showRakSlotByID } from "@/services/rak";
 import { Button } from "@/components/ui/button";
 
-export default function DetailRakSlot() {
+export default function DetailRakSlot({
+  params: { id },
+}: {
+  params: { id: string };
+}) {
   const router = useRouter();
-  const [data, setData] = useState<RakSlot[] | null>(null);
-  const getData = async (token: string) => {
-    const res = await getRakSlot(token);
-    setData(res);
-  };
-  const [selected, setSelected] = useState<RakSlot | null>(null);
+  const [selected, setSelected] = useState<RakSlot[] | null>(null);
   console.log(selected);
-  console.log(data);
+  // console.log();
   const getSelected = async (token: string, id: string) => {
     const res = await showRakSlotByID(token, id);
     console.log(res.data);
     setSelected(res.data);
   };
 
-  console.log(data);
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       router.push("/");
     } else {
-      getData(token);
+      getSelected(token, id);
     }
   }, []);
 
@@ -44,60 +42,57 @@ export default function DetailRakSlot() {
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      ID Transaksi
+                      ID Rak Slot
                     </th>
                     <th
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      Nama Petugas
+                      X Coordinate
                     </th>
                     <th
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      Jumlah
+                      Y Coordinate
                     </th>
                     <th
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      Tanggal Transaksi
+                      Z Coordinate
                     </th>
                     <th
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
                     >
-                      Jenis Transaksi
-                    </th>
-                    <th
-                      scope="col"
-                      className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
-                    >
-                      Detail
+                      Status
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {/* {selected && ( */}
-                  <tr className="transition-all hover:bg-gray-100 hover:shadow-lg">
-                    <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                      {selected?.id_rakslot}
-                    </td>
-                    <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                      {selected?.Xcoordinate}
-                    </td>
-                    <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                      {selected?.Ycoordinate}
-                    </td>
-                    <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                      {selected?.Zcoordinate}
-                    </td>
-                    <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                      {selected?.status}
-                    </td>
-                  </tr>
-                  {/* )} */}
+                  {selected?.map((item, i) => (
+                    <tr
+                      key={i}
+                      className="transition-all hover:bg-gray-100 hover:shadow-lg"
+                    >
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {item.id_rakslot}
+                      </td>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {item.Xcoordinate}
+                      </td>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {item.Ycoordinate}
+                      </td>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {item.Zcoordinate}
+                      </td>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {item.status}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
