@@ -43,3 +43,25 @@ export const logout = async (token) => {
     throw new Error(errorMessage);
   }
 };
+
+export const signUp = async (username, nama, level, password) => {
+  try {
+    const response = await axios.post("http://localhost:8000/api/signup", {
+      username,
+      nama,
+      level,
+      password,
+    });
+
+    if (response.status === 201) {
+      console.log("Signup successful:", response.data.message);
+    } else {
+      console.error("Unexpected response:", response.data);
+    }
+  } catch (error) {
+    console.error(
+      "Error during signup:",
+      error.response.data.errors || error.message
+    );
+  }
+};

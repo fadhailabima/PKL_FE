@@ -1,86 +1,74 @@
-import React from "react";
+"use client";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { AlertCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import React, { useState } from "react";
 
 export default function Profile() {
   return (
-    <div className="h-250 py-2 flex justify-center items-center">
-      <div className="lg:w-2/5 md:w-1/2 w-2/3">
-        <form className="bg-white p-10 rounded-lg shadow-lg min-w-full">
-          <h1 className="text-center text-2xl mb-6 text-gray-600 font-bold font-sans">
-            Formregister
-          </h1>
-          <div>
-            <label
-              className="text-gray-800 font-semibold block my-3 text-md"
-              // for="username"
+    <div className="h-full">
+      <div className="border-b-2 block md:flex">
+        <div className="w-full md:w-2/5 p-4 sm:p-6 lg:p-8 bg-white shadow-md">
+          <div className="flex justify-between">
+            <span className="text-xl font-bold block">Profile</span>
+            <a
+              href="#"
+              className="-mt-2 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800"
             >
-              Username
-            </label>
-            <input
-              className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-              type="text"
-              name="username"
-              id="username"
-              placeholder="username"
-            />
+              Edit
+            </a>
           </div>
-          <div>
-            <label
-              className="text-gray-800 font-semibold block my-3 text-md"
-              // for="email"
-            >
-              Email
-            </label>
-            <input
-              className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-              type="text"
-              name="email"
-              id="email"
-              placeholder="@email"
-            />
+          <div className="w-full p-8 mx-2 flex justify-center">
+            <Avatar className="max-w-xs w-40 h-40 items-center">
+              <AvatarImage src="" alt="@shadcn" />
+              <AvatarFallback></AvatarFallback>
+            </Avatar>
           </div>
-          <div>
-            <label
-              className="text-gray-800 font-semibold block my-3 text-md"
-              // for="password"
-            >
-              Password
-            </label>
-            <input
-              className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-              type="text"
-              name="password"
-              id="password"
-              placeholder="password"
-            />
+          <div className="pb-8">
+            <span className="m-8 border-1 rounded-r px-14 py-2 w-full text-[1.2rem]">
+              bimadharmawan6@gmail.com
+            </span>
           </div>
-          <div>
-            <label
-              className="text-gray-800 font-semibold block my-3 text-md"
-              // for="confirm"
-            >
-              Confirm password
-            </label>
-            <input
-              className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-              type="text"
-              name="confirm"
-              id="confirm"
-              placeholder="confirm password"
-            />
+        </div>
+
+        <div className="w-full md:w-3/5 p-8 bg-white lg:ml-4 shadow-md">
+          <div className="rounded  shadow p-6">
+            <div className="pb-4">
+              <label className="font-semibold text-gray-700 block pb-2">
+                Nama
+              </label>
+              <span className="border-1  rounded-r px-4 py-2 w-full text-[1.2rem]">
+                bimadharmawan6@gmail.com
+              </span>
+            </div>
+            <div className="pb-4">
+              <label className="font-semibold text-gray-700 block pb-2">
+                Email
+              </label>
+              <span className="border-1  rounded-r px-4 py-2 w-full text-[1.2rem]">
+                bimadharmawan6@gmail.com
+              </span>
+            </div>
+            <div className="pb-4">
+              <label className="font-semibold text-gray-700 block pb-2">
+                Alamat
+              </label>
+              <span className="border-1  rounded-r px-4 py-2 w-full  text-[1.2rem]">
+                bimadharmawan6@gmail.com
+              </span>
+            </div>
+            <div className="pb-4">
+              <label className="font-semibold text-gray-700 block pb-2">
+                Nomor Telepon
+              </label>
+              <span className="border-1  rounded-r px-4 py-2 w-full text-[1.2rem]">
+                bimadharmawan6@gmail.com
+              </span>
+            </div>
           </div>
-          <button
-            type="submit"
-            className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
-          >
-            Register
-          </button>
-          <button
-            type="submit"
-            className="w-full mt-6 mb-3 bg-indigo-100 rounded-lg px-4 py-2 text-lg text-gray-800 tracking-wide font-semibold font-sans"
-          >
-            Login
-          </button>
-        </form>
+        </div>
       </div>
     </div>
   );

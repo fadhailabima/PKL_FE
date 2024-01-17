@@ -68,8 +68,6 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
     </div>
   );
 };
-
-// Komponen Sidebar yang diekspor sebagai default
 export default function Sidebar() {
   const router = useRouter();
   const handleDialogContinue = async (e: React.MouseEvent<HTMLElement>) => {
@@ -118,7 +116,7 @@ export default function Sidebar() {
     <div className="md:w-60 bg-white h-screen flex-1 fixed border-r border-zinc-200 hidden md:flex">
       <div className="flex flex-col space-y-6 w-full">
         <Link
-          href="/dashboard"
+          href="/profile"
           className="flex flex-row space-x-3 items-center justify-center md:justify-start md:px-6 border-b border-zinc-200 h-14 w-full"
         >
           <Icon
@@ -139,7 +137,8 @@ export default function Sidebar() {
             <MenuItem key={idx} item={item} />
           ))}
           <Link
-            href="/profile"
+            href="/tambah-user
+            "
             className="flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100"
           >
             <Icon icon="lucide:user-plus" width="24" height="24" />
