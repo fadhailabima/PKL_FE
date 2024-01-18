@@ -166,7 +166,7 @@ export default function Dashboard() {
                                 onClick={(e) =>
                                   chooseRak(
                                     localStorage.getItem("token")!,
-                                    selected?.idrak ?? '',
+                                    selected?.idrak ?? "",
                                     e
                                   )
                                 }

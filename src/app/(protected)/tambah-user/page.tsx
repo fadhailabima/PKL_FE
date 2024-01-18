@@ -34,7 +34,7 @@ export default function Profile() {
         console.log("ini berhasil signup");
         localStorage.setItem("token", res);
         localStorage.setItem("user", JSON.stringify(res));
-        router.push("/profile");
+        router.push("/tambah-user");
       }
     } catch (error: any) {
       setError(error.message);

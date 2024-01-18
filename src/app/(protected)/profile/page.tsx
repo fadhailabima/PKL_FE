@@ -31,20 +31,20 @@ export default function Profile() {
           <div className="flex justify-between">
             <span className="text-xl font-bold block">Profile</span>
             <a
-              href="#"
+              href="/edit-profile"
               className="-mt-2 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800"
             >
               Edit
             </a>
           </div>
-          <div className="w-full p-8 mx-2 flex justify-center">
+          <div className="w-full p-8 flex justify-center">
             <Avatar className="max-w-xs w-40 h-40 items-center">
               <AvatarImage src="" alt="@shadcn" />
               <AvatarFallback></AvatarFallback>
             </Avatar>
           </div>
-          <div className="pb-8">
-            <span className="m-8 border-1 rounded-r px-14 py-2 w-full text-[1.2rem]">
+          <div className="w-full p-5 flex justify-center">
+            <span className="max-w-xs w-38 h-10 items-center text-[2rem]">
               {data?.idadmin}
             </span>
           </div>
@@ -86,7 +86,7 @@ export default function Profile() {
             </div>
             <div className="pb-4">
               <label className="font-semibold text-gray-700 block pb-2">
-                Nomor Telepon
+                Status
               </label>
               <span className="border-1  rounded-r px-4 py-2 w-full text-[1.2rem]">
                 {data?.status}

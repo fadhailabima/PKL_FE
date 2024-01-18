@@ -65,3 +65,29 @@ export const signUp = async (username, nama, level, password) => {
     );
   }
 };
+
+export const updateProfile = async (token, alamat, email, handphone, foto) => {
+  try {
+    const formData = new FormData();
+    formData.append("alamat", alamat);
+    formData.append("email", email);
+    formData.append("handphone", handphone);
+    formData.append("foto", foto); // Anda dapat melewatkan file langsung ke sini
+
+    const response = await axios.put(
+      "http://localhost:8000/api/updateProfile",
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data", // Penting untuk mengatur jenis konten
+        },
+      }
+    );
+  } catch (error) {
+    console.error(
+      "Error during update profile:",
+      error.response.data.errors || error.message
+    );
+  }
+};
