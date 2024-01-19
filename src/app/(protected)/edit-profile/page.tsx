@@ -11,6 +11,11 @@ import { Input } from "@/components/ui/input";
 export default function editProfile() {
   const router = useRouter();
   const [data, setData] = useState<Admin | null>(null);
+  const [alamat, setAlamat] = useState("");
+  const [email, setEmail] = useState("");
+  const [handphone, setHandphone] = useState("");
+  const [foto, setFoto] = useState<File>();
+  const [loading, setLoading] = useState(false);
 
   const getData = async (token: string) => {
     const res = await getAdmin(token);
@@ -26,24 +31,40 @@ export default function editProfile() {
     }
   }, []);
 
-  //   const [nama, setNama] = useState("");
-  const [alamat, setAlamat] = useState("");
-  const [email, setEmail] = useState("");
-  const [handphone, setHandphone] = useState("");
-  const [foto, setFoto] = useState<File>();
-
-  const handleUpdate = async (
-    token: string,
-    e: React.MouseEvent<HTMLElement>
-  ) => {
+  const handleUpdate = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      await updateProfile(token, alamat, email, handphone, foto);
-      console.log("ini berhasil update");
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.error("Token not found.");
+        // Handle case where token is not available
+        return;
+      }
+
+      const updated = await updateProfile({
+        token,
+        alamat,
+        email,
+        handphone,
+        foto,
+      });
+
+      console.log("Profile updated successfully", updated);
       router.push("/profile");
     } catch (error: any) {
-      console.error(error);
+      console.error(
+        "Error updating profile:",
+        error.response?.data || error.message
+      );
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFoto(e.target.files?.[0]);
   };
   return (
     <div
@@ -63,13 +84,18 @@ export default function editProfile() {
         <form
           className="flex-column justify-items-start"
           encType="multipart/form-data"
-          method="put"
+          onSubmit={(e) => handleUpdate(e)}
         >
           <div className="mb-6 flex items-center">
             <label className="mr-5 text-sm font-medium text-gray-600">
               Nama:
             </label>
-            <Input className="p-1" placeholder={data?.nama} disabled />
+            <Input
+              className="p-1"
+              placeholder={data?.nama}
+              value={data?.nama}
+              disabled
+            />
           </div>
           <div className="mb-6 flex items-center">
             <label className="mr-3 text-sm font-medium text-gray-600">
@@ -78,6 +104,7 @@ export default function editProfile() {
             <Input
               className="p-1"
               placeholder={data?.alamat}
+              value={alamat}
               onChange={(e) => setAlamat(e.target.value)}
             />
           </div>
@@ -88,6 +115,7 @@ export default function editProfile() {
             <Input
               className="p-1"
               placeholder={data?.email}
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
@@ -98,6 +126,7 @@ export default function editProfile() {
             <Input
               className="p-1"
               placeholder={data?.handphone}
+              value={handphone}
               onChange={(e) => setHandphone(e.target.value)}
             />
           </div>
@@ -112,15 +141,16 @@ export default function editProfile() {
               name="foto"
               accept="image/*"
               className="p-1"
-              onChange={(e) => setFoto(e.target.files?.[0])}
+              onChange={handleFileChange}
             />
           </div>
           <div>
             <Button
               className="w-full mt-6 mb-3 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
-              onClick={(e) => handleUpdate(localStorage.getItem("token")!, e)}
+              type="submit"
+              disabled={loading}
             >
-              Submit
+              {loading ? "Submitting..." : "Submit"}
             </Button>
           </div>
         </form>

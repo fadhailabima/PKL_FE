@@ -72,22 +72,22 @@ export const updateProfile = async (token, alamat, email, handphone, foto) => {
     formData.append("alamat", alamat);
     formData.append("email", email);
     formData.append("handphone", handphone);
-    formData.append("foto", foto); // Anda dapat melewatkan file langsung ke sini
+    formData.append("foto", foto);
 
+    // console.log(token); // Add this line
     const response = await axios.put(
       "http://localhost:8000/api/updateProfile",
       formData,
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data", // Penting untuk mengatur jenis konten
+          "Content-Type": "multipart/form-data",
         },
       }
     );
+
+    return response.data;
   } catch (error) {
-    console.error(
-      "Error during update profile:",
-      error.response.data.errors || error.message
-    );
+    throw error;
   }
 };
