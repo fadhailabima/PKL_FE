@@ -1,23 +1,20 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { RakSlot, showRakSlotByID } from "@/services/rak";
+import {
+  Rak,
+  getRak,
+} from "@/services/rak";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export default function DetailRakSlot({
-  params: { id },
-}: {
-  params: { id: string };
-}) {
+export default function manageRak() {
   const router = useRouter();
-  const [selected, setSelected] = useState<RakSlot[] | null>(null);
-  console.log(selected);
-  // console.log();
-  const getSelected = async (token: string, id: string) => {
-    const res = await showRakSlotByID(token, id);
-    console.log(res.data);
-    setSelected(res.data);
+  const [data, setData] = useState<Rak[] | null>(null);
+
+  const getData = async (token: string) => {
+    const res = await getRak(token);
+    setData(res);
   };
 
   useEffect(() => {
@@ -25,7 +22,7 @@ export default function DetailRakSlot({
     if (!token) {
       router.push("/");
     } else {
-      getSelected(token, id);
+      getData(token);
     }
   }, []);
 
@@ -33,11 +30,11 @@ export default function DetailRakSlot({
     <div className="flex-1 max-h-full p-5">
       <div className="flex justify-between items-center">
         <h2 className="text-gray-500 mt-6 text-xl text-center font-semibold pb-1">
-          Detail Rak Slot
+          Daftar Rak
         </h2>
         <div>
-          <Link href="/manage-rak">
-            <Button className="mt-6">Back</Button>
+          <Link href="">
+            <Button className="mt-6">Tambah Rak</Button>
           </Link>
         </div>
       </div>
@@ -52,54 +49,56 @@ export default function DetailRakSlot({
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      ID Rak Slot
+                      ID Rak
                     </th>
                     <th
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      X Coordinate
+                      Kapasitas
                     </th>
                     <th
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      Y Coordinate
+                      Kapasitas Sisa
                     </th>
                     <th
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
-                    >
-                      Z Coordinate
-                    </th>
-                    <th
-                      scope="col"
-                      className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
                     >
                       Status
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
+                    >
+                      Detail Rak Slot
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {selected?.map((item, i) => (
+                  {data?.map((item, i) => (
                     <tr
                       key={i}
                       className="transition-all hover:bg-gray-100 hover:shadow-lg"
                     >
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {item.id_rakslot}
+                        {item.idrak}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {item.Xcoordinate}
+                        {item.kapasitas}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {item.Ycoordinate}
-                      </td>
-                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {item.Zcoordinate}
+                        {item.kapasitas_sisa}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {item.status}
+                      </td>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        <Link href={"/detail-rak-slot/" + item.idrak}>
+                          <Button variant="link">Detail</Button>
+                        </Link>
                       </td>
                     </tr>
                   ))}

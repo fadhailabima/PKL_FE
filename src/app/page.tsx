@@ -23,8 +23,8 @@ export default function Home() {
       const res = await login(username, password);
       if (res) {
         console.log("ini berhasil login");
-        localStorage.setItem("token", res);
-        localStorage.setItem("user", JSON.stringify(res));
+        localStorage.setItem("token", res.token);
+        localStorage.setItem("level", res.level);
         router.push("/dashboard");
       }
     } catch (error: any) {

@@ -7,6 +7,10 @@ import { Button } from "@/components/ui/button";
 import { getAdmin, Admin } from "@/services/admin";
 import { updateProfile } from "@/services/auth";
 import { Input } from "@/components/ui/input";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+import { Icon } from "@iconify/react";
+import Link from "next/link";
 
 export default function editProfile() {
   const router = useRouter();
@@ -16,6 +20,8 @@ export default function editProfile() {
   const [handphone, setHandphone] = useState("");
   const [foto, setFoto] = useState<File>();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
   const getData = async (token: string) => {
     const res = await getAdmin(token);
@@ -34,6 +40,7 @@ export default function editProfile() {
   const handleUpdate = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       const token = localStorage.getItem("token");
 
@@ -42,17 +49,17 @@ export default function editProfile() {
         // Handle case where token is not available
         return;
       }
+      console.log("ini token", token);
 
-      const updated = await updateProfile({
+      const updated = await updateProfile(
         token,
         alamat,
         email,
         handphone,
-        foto,
-      });
+        foto
+      );
 
       console.log("Profile updated successfully", updated);
-      router.push("/profile");
     } catch (error: any) {
       console.error(
         "Error updating profile:",
@@ -61,6 +68,13 @@ export default function editProfile() {
     } finally {
       setLoading(false);
     }
+
+    setShowSuccessAlert(true);
+
+    setTimeout(() => {
+      // Pindahkan router.push ke dalam setTimeout
+      router.push("/profile");
+    }, 2500);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,13 +85,25 @@ export default function editProfile() {
       className="mt-2 bg-white p-2 shadow rounded-lg"
       style={{ width: "50%", margin: "0 auto", height: "70vh" }}
     >
-      <h2 className="text-gray-500 text-lg font-semibold pb-1">Edit Profil</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-gray-500 text-lg font-semibold pb-1">
+          Edit Profil
+        </h2>
+        <div>
+          <Link href="/profile">
+            <Icon
+              icon="iconamoon:arrow-left-5-circle-fill"
+              className="h-9 w-9 flex items-center justify-center text-center"
+            />
+          </Link>
+        </div>
+      </div>
       <div className="my-0.5"></div>
       <div className="bg-gradient-to-r from-green-300 to-green-500 h-px mb-2"></div>
       <div className="text-base flex items-center justify-center">
         <div className="mb-48 mr-8">
           <Avatar className="max-w-xs w-40 h-40 items-center">
-            <AvatarImage src={data?.foto} alt="@shadcn" />
+            <AvatarImage src={data?.image_url} alt="@shadcn" />
             <AvatarFallback></AvatarFallback>
           </Avatar>
         </div>
@@ -150,8 +176,24 @@ export default function editProfile() {
               type="submit"
               disabled={loading}
             >
-              {loading ? "Submitting..." : "Submit"}
+              {loading ? "Saving..." : "Save"}
             </Button>
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Gagal Update</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            {showSuccessAlert && (
+              <Alert>
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Update Succesfull</AlertTitle>
+                <AlertDescription>
+                  Your account has been updated successfully.
+                </AlertDescription>
+              </Alert>
+            )}
           </div>
         </form>
       </div>

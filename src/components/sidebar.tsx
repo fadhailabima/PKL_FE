@@ -6,68 +6,17 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { usePathname, useRouter } from "next/navigation";
-import { SIDENAV_ITEMS } from "@/constants";
-import { SideNavItem } from "@/types";
+import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 import { logout } from "@/services/auth";
 import { Button } from "./ui/button";
 import { Admin, getAdmin } from "@/services/admin";
 
-// Menuitem dapat diambil di luar fungsi agar bisa digunakan di luar komponen
-const MenuItem = ({ item }: { item: SideNavItem }) => {
-  const pathname = usePathname();
-  const [subMenuOpen, setSubMenuOpen] = useState(false);
-
-  const toggleSubMenu = () => {
-    setSubMenuOpen(!subMenuOpen);
-  };
-
-  // Perhatikan bahwa fungsi ini harus mengembalikan JSX
-  return (
-    <div className="">
-      {item.submenu ? (
-        <>
-          <button
-            onClick={toggleSubMenu}
-            className={`flex flex-row items-center p-2 rounded-lg hover-bg-zinc-100 w-full justify-between hover:bg-zinc-100 ${
-              pathname.includes(item.path) ? "bg-zinc-100" : ""
-            }`}
-          >
-            <div className="flex flex-row space-x-4 items-center">
-              {item.icon}
-              <span className="font-semibold text-xl  flex">{item.title}</span>
-            </div>
-
-            <div className={`${subMenuOpen ? "rotate-180" : ""} flex`}>
-              <Icon icon="lucide:chevron-down" width="24" height="24" />
-            </div>
-          </button>
-
-          {subMenuOpen && (
-            <div className="my-2 ml-12 flex flex-col space-y-4">
-              {item.subMenuItems?.map((subItem, idx) => (
-                <Link
-                  key={idx}
-                  href={subItem.path}
-                  className={`${subItem.path === pathname ? "font-bold" : ""}`}
-                >
-                  <span>{subItem.title}</span>
-                </Link>
-              ))}
-            </div>
-          )}
-        </>
-      ) : null}
-    </div>
-  );
-};
 export default function Sidebar() {
   const router = useRouter();
   const handleDialogContinue = async (e: React.MouseEvent<HTMLElement>) => {
@@ -133,16 +82,29 @@ export default function Sidebar() {
             <Icon icon="lucide:home" width="24" height="24" />
             <span className="font-semibold text-xl flex">Home</span>
           </Link>
-          {SIDENAV_ITEMS.map((item, idx) => (
-            <MenuItem key={idx} item={item} />
-          ))}
+          <Link
+            href="/manage-rak
+            "
+            className="flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100"
+          >
+            <Icon icon="lucide:plus-circle" width="24" height="24" />
+            <span className="font-semibold text-xl flex">Manage Rak</span>
+          </Link>
           <Link
             href="/tambah-user
             "
             className="flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100"
           >
+            <Icon icon="lucide:folder-plus" width="24" height="24" />
+            <span className="font-semibold text-xl flex">Manage Produk</span>
+          </Link>
+          <Link
+            href="/manage-user
+            "
+            className="flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100"
+          >
             <Icon icon="lucide:user-plus" width="24" height="24" />
-            <span className="font-semibold text-xl flex">Tambah User</span>
+            <span className="font-semibold text-xl flex">Manage User</span>
           </Link>
           <div className="flex flex-col space-y-9 w-full">
             <AlertDialog>

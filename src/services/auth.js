@@ -7,8 +7,10 @@ export const login = async (username, password) => {
       password: password,
     });
 
+    console.log(response.data);
+
     if (response.data.message === "Login Berhasil") {
-      return response.data.data.user.token;
+      return response.data.data.user;
     } else {
       throw new Error("Kombinasi username dan password tidak valid.");
     }
@@ -68,14 +70,24 @@ export const signUp = async (username, nama, level, password) => {
 
 export const updateProfile = async (token, alamat, email, handphone, foto) => {
   try {
+    console.log("alamat", alamat);
+    console.log("email", email);
+    console.log("handphone", handphone);
+
     const formData = new FormData();
     formData.append("alamat", alamat);
     formData.append("email", email);
     formData.append("handphone", handphone);
-    formData.append("foto", foto);
 
-    // console.log(token); // Add this line
-    const response = await axios.put(
+    if (foto) {
+      formData.append("foto", foto);
+    }
+    if (alamat)
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ", " + pair[1]);
+    }
+
+    const response = await axios.post(
       "http://localhost:8000/api/updateProfile",
       formData,
       {

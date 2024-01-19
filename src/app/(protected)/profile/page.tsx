@@ -39,7 +39,7 @@ export default function Profile() {
           </div>
           <div className="w-full p-8 flex justify-center">
             <Avatar className="max-w-xs w-40 h-40 items-center">
-              <AvatarImage src="" alt="@shadcn" />
+              <AvatarImage src={data?.image_url} alt="@shadcn" />
               <AvatarFallback></AvatarFallback>
             </Avatar>
           </div>
