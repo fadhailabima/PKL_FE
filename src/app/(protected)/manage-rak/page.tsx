@@ -1,10 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Rak,
-  getRak,
-} from "@/services/rak";
+import { Rak, getRak } from "@/services/rak";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 

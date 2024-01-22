@@ -1,7 +1,4 @@
 "use client";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { getAdmin, Admin } from "@/services/admin";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

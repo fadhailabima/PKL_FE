@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 import { logout } from "@/services/auth";
 import { Button } from "./ui/button";
+import { User } from "@nextui-org/react";
 import { Admin, getAdmin } from "@/services/admin";
 
 export default function Sidebar() {
@@ -68,11 +69,14 @@ export default function Sidebar() {
           href="/profile"
           className="flex flex-row space-x-3 items-center justify-center md:justify-start md:px-6 border-b border-zinc-200 h-14 w-full"
         >
-          <Icon
-            icon="iconamoon:profile-fill"
-            className="h-9 w-9 flex items-center justify-center text-center"
+          <User
+            name={data?.nama}
+            className="font-semibold text-base"
+            description={data?.idadmin}
+            avatarProps={{
+              src: data?.image_url,
+            }}
           />
-          <span className="font-semibold text-base">{data?.nama}</span>
         </Link>
         <div className="flex flex-col space-y-5  md:px-4 ">
           <Link
@@ -91,7 +95,7 @@ export default function Sidebar() {
             <span className="font-semibold text-xl flex">Manage Rak</span>
           </Link>
           <Link
-            href="/tambah-user
+            href="/manage-produk
             "
             className="flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100"
           >

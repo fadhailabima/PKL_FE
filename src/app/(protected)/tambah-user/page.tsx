@@ -1,6 +1,7 @@
 "use client";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,15 +46,22 @@ export default function Profile() {
     // Reload the page after a short delay (adjust the delay if needed)
     setTimeout(() => {
       window.location.reload();
-    }, 3500);
+    }, 2500);
   };
   return (
     <div className="h-250 py-2 flex justify-center items-center">
       <div className="lg:w-2/5 md:w-1/2 w-2/3">
         <form className="bg-white p-10 rounded-lg shadow-lg min-w-full">
-          <h1 className="text-center text-2xl mb-6 text-gray-600 font-bold font-sans">
-            Register
-          </h1>
+          <div className="flex justify-between items-center">
+            <h2 className="text-gray-500 mt-2 text-xl text-center font-semibold pb-1">
+              Register
+            </h2>
+            <div>
+              <Link href="/manage-user">
+                <Button className="mt-6">Back</Button>
+              </Link>
+            </div>
+          </div>
           <div>
             <label className="text-gray-800 font-semibold block my-3 text-md">
               Username
@@ -101,13 +109,14 @@ export default function Profile() {
             <Input
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
+              type="password"
             />
           </div>
           <Button
             className="w-full mt-6 mb-3 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
             onClick={handlesignUp}
           >
-            Login
+            Sign Up
           </Button>
           {error && (
             <Alert variant="destructive">

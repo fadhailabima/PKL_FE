@@ -65,11 +65,12 @@ export type Karyawan = {
 };
 
 export type User = {
+  id: number;
   username: string;
   admin: Admin;
   karyawan: Karyawan;
   level: string;
-}
+};
 
 export const getUser = async (token: string): Promise<User[]> => {
   try {
@@ -86,4 +87,19 @@ export const getUser = async (token: string): Promise<User[]> => {
     console.log(error);
     throw new Error(`Terjadi kesalahan dalam mendapatkan data user`);
   }
-}
+};
+
+export const deleteUser = async (token: string, id: number) => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:8000/api/deleteUser/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  } catch (error) {
+    throw error;
+  }
+};

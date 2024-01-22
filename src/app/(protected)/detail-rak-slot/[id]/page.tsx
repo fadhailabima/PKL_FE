@@ -13,7 +13,6 @@ export default function DetailRakSlot({
   const router = useRouter();
   const [selected, setSelected] = useState<RakSlot[] | null>(null);
   console.log(selected);
-  // console.log();
   const getSelected = async (token: string, id: string) => {
     const res = await showRakSlotByID(token, id);
     console.log(res.data);
