@@ -39,3 +39,30 @@ export const deleteProduk = async (token: string, idproduk: string) => {
         throw error;
     }
 }
+
+export const addProduk = async (
+  token: string,
+  namaproduk: string,
+  jenisproduk: string,
+  value: string
+) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:8000/api/tambahproduk`,
+      {
+        namaproduk,
+        jenisproduk,
+        value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

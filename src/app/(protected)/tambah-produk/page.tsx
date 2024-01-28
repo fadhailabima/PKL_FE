@@ -1,0 +1,140 @@
+"use client";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { addProduk } from "@/services/produk";
+import { AlertCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+
+export default function Profile() {
+  // const [position, setPosition] = React.useState("karyawan");
+  const [namaproduk, setNamaproduk] = useState("");
+  const [jenisproduk, setJenisproduk] = useState("");
+  const [value, setValue] = useState("");
+  const [error, setError] = useState(false);
+  const router = useRouter();
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+
+  const handleAddProduk = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token"); // get the token from local storage
+      if (!token) {
+        throw new Error("No token found");
+      }
+      const res = await addProduk(token, namaproduk, jenisproduk, value);
+      if (res) {
+        console.log("Successfully added Product");
+        router.push("/tambah-produk");
+      }
+    } catch (error: any) {
+      setError(error.message);
+    }
+
+    setShowSuccessAlert(true);
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
+  };
+  return (
+    <div className="h-250 py-2 flex justify-center items-center">
+      <div className="lg:w-2/5 md:w-1/2 w-2/3">
+        <form className="bg-white p-10 rounded-lg shadow-lg min-w-full">
+          <div className="flex justify-between items-center">
+            <h2 className="text-gray-500 mt-2 text-xl text-center font-semibold pb-1">
+              Tambah Produk
+            </h2>
+            <div>
+              <Link href="/manage-produk">
+                <Button className="mt-6">Back</Button>
+              </Link>
+            </div>
+          </div>
+          <div>
+            <label className="text-gray-800 font-semibold block my-3 text-md">
+              Nama Produk
+            </label>
+            <Input
+              onChange={(e) => setNamaproduk(e.target.value)}
+              placeholder="Enter your product's name"
+            />
+          </div>
+          <label className="text-gray-800 font-semibold block my-3 text-md">
+            Jenis Produk
+          </label>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="w-56 mt-2 mb-2 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans">
+                {jenisproduk}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Pilih Jenis Produk</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuRadioGroup
+                value={jenisproduk}
+                onValueChange={setJenisproduk}
+              >
+                <DropdownMenuRadioItem value="Pupuk Tunggal">
+                  Pupuk Tunggal
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="Pupuk Majemuk">
+                  Pupuk Majemuk
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="Pupuk Soluble">
+                  Pupuk Soluble
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="Pupuk Organik">
+                  Pupuk Organik
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="Pestisida">
+                  Pestisida
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <div>
+            <label className="text-gray-800 font-semibold block my-3 text-md">
+              Value
+            </label>
+            <Input
+              onChange={(e) => setValue(e.target.value)}
+              placeholder="Enter your product's value"
+            />
+          </div>
+          <Button
+            className="w-full mt-6 mb-3 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
+            onClick={handleAddProduk}
+          >
+            Submit
+          </Button>
+          {error && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Gagal menambahkan produk</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          {showSuccessAlert && (
+            <Alert>
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Berhasil menambahkan produk</AlertTitle>
+              <AlertDescription>Produk berhasil ditambahkan</AlertDescription>
+            </Alert>
+          )}
+        </form>
+      </div>
+    </div>
+  );
+}

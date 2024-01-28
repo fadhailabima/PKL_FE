@@ -26,6 +26,7 @@ export const getRak = async (token: string): Promise<Rak[]> => {
 
 export type RakSlot = {
   id_rakslot: string;
+  nama_produk: string;
   Xcoordinate: string;
   Ycoordinate: string;
   Zcoordinate: string;
@@ -36,6 +37,31 @@ export const showRakSlotByID = async (token: string, idrak: string) => {
   try {
     const response = await axios.get(
       `http://localhost:8000/api/rak/${idrak}/rakslots`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addRak = async (
+  token: string,
+  kapasitas: string,
+  status: string
+) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:8000/api/tambahRakdanSlot`,
+      {
+        kapasitas,
+        status,
+      },
       {
         headers: {
           Authorization: `Bearer ${token}`,

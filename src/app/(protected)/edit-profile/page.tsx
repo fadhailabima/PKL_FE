@@ -83,7 +83,7 @@ export default function editProfile() {
   return (
     <div
       className="mt-2 bg-white p-2 shadow rounded-lg"
-      style={{ width: "50%", margin: "0 auto", height: "70vh" }}
+      style={{ width: "60%", margin: "0 auto", height: "60vh" }}
     >
       <div className="flex justify-between items-center">
         <h2 className="text-gray-500 text-lg font-semibold pb-1">

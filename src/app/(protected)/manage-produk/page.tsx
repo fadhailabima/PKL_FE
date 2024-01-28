@@ -16,9 +16,14 @@ import {
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function manageRak() {
   const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterTerm, setFilterTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(8);
   const [error, setError] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [data, setData] = useState<Produk[] | null>(null);
@@ -54,8 +59,20 @@ export default function manageRak() {
     setError(false);
     setTimeout(() => {
       window.location.reload();
-    }, 3000);
+    }, 1000);
   };
+
+  const filteredItems = data?.filter(
+    (item) =>
+      (item.namaproduk?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+        item.idproduk.includes(searchTerm)) &&
+      (filterTerm === "" || item.jenisproduk === filterTerm)
+  );
+  const totalPages = Math.ceil((filteredItems?.length ?? 0) / itemsPerPage);
+  const currentItems = filteredItems?.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="flex-1 max-h-full p-5">
@@ -63,8 +80,32 @@ export default function manageRak() {
         <h2 className="text-gray-500 mt-6 text-xl text-center font-semibold pb-1">
           Daftar Produk
         </h2>
+        <Input
+          className="mt-6"
+          style={{ width: "500px" }}
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search..."
+        />
+        <select
+          value={filterTerm}
+          onChange={(e) => setFilterTerm(e.target.value)}
+          className="mt-6 border border-gray-300 rounded-lg shadow-sm focus:outline-none text-xs font-medium tracking-wider  text-gray-500 uppercase"
+          style={{ width: "250px", height: "40px" }}
+        >
+          <option value="" disabled selected>
+            Select Product Type
+          </option>
+          <option value="">All</option>
+          <option value="Pupuk Tunggal">Pupuk Tunggal</option>
+          <option value="Pupuk Majemuk">Pupuk Majemuk</option>
+          <option value="Pupuk Soluble">Pupuk Soluble</option>
+          <option value="Pupuk Organik">Pupuk Organik</option>
+          <option value="Pestisida">Pestisida</option>
+        </select>
         <div>
-          <Link href="">
+          <Link href="/tambah-produk">
             <Button className="mt-6">Tambah Produk</Button>
           </Link>
         </div>
@@ -103,7 +144,7 @@ export default function manageRak() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {data?.map((item, i) => (
+                  {currentItems?.map((item, i) => (
                     <tr
                       key={i}
                       className="transition-all hover:bg-gray-100 hover:shadow-lg"
@@ -125,7 +166,7 @@ export default function manageRak() {
                           <AlertDialogContent>
                             <AlertDialogHeader>
                               <AlertDialogTitle>
-                                Apakah anda yakin ingin menghapus user ?
+                                Apakah anda yakin ingin menghapus produk ?
                               </AlertDialogTitle>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -148,19 +189,36 @@ export default function manageRak() {
               {error && (
                 <Alert variant="destructive">
                   <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Gagal Sign Up</AlertTitle>
+                  <AlertTitle>Gagal hapus produk</AlertTitle>
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
               {showSuccessAlert && (
                 <Alert>
                   <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Sign Up Successful</AlertTitle>
-                  <AlertDescription>
-                    Your account has been created successfully.
-                  </AlertDescription>
+                  <AlertTitle>Berhasil hapus produk</AlertTitle>
+                  <AlertDescription>Produk berhasil dihapus</AlertDescription>
                 </Alert>
               )}
+
+              <div className="flex justify-between items-center mt-2">
+                <Button
+                  className="m-2"
+                  onClick={() => setCurrentPage((old) => Math.max(old - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </Button>
+                <Button
+                  className="m-2"
+                  onClick={() =>
+                    setCurrentPage((old) => Math.min(old + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </Button>
+              </div>
             </div>
           </div>
         </div>

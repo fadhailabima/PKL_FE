@@ -4,9 +4,24 @@ import { useRouter } from "next/navigation";
 import { Transaksi, getTransaksi } from "@/services/transaksi";
 import { Button } from "@/components/ui/button";
 import { Count, getCount } from "@/services/admin";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 export default function Dashboard() {
   const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterTerm, setFilterTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(8);
 
   const [count, setCount] = useState<Count | null>(null);
 
@@ -39,6 +54,19 @@ export default function Dashboard() {
       ambilData(token);
     }
   }, []);
+  const filteredItems = transaksi?.filter(
+    (item) =>
+      (item.produk.namaproduk
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+        item.tanggal_transaksi.includes(searchTerm)) &&
+      (filterTerm === "" || item.jenis_transaksi === filterTerm)
+  );
+  const totalPages = Math.ceil((filteredItems?.length ?? 0) / itemsPerPage);
+  const currentItems = filteredItems?.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
   return (
     <main className="flex-1 max-h-full p-5">
       <div className="flex flex-col items-start justify-between pb-6 space-y-4 border-b lg:items-center lg:space-y-0 lg:flex-row">
@@ -71,9 +99,7 @@ export default function Dashboard() {
           <div className="flex items-start justify-between">
             <div className="flex flex-col space-y-2">
               <span className="text-gray-400">Total Rak</span>
-              <span className="text-lg font-semibold">
-                {count?.jumlah_rak}
-              </span>
+              <span className="text-lg font-semibold">{count?.jumlah_rak}</span>
             </div>
             <div className="p-8"></div>
           </div>
@@ -91,6 +117,29 @@ export default function Dashboard() {
         </div>
       </div>
       <h3 className="mt-6 text-xl">Transaksi</h3>
+      <div className="flex justify-between items-center">
+        <Input
+          className="mt-2"
+          style={{ width: "500px" }}
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search..."
+        />
+        <select
+          value={filterTerm}
+          onChange={(e) => setFilterTerm(e.target.value)}
+          className="border border-gray-300 rounded-lg shadow-sm focus:outline-none text-xs font-medium tracking-wider  text-gray-500 uppercase"
+          style={{ width: "250px", height: "40px" }}
+        >
+          <option value="" disabled selected>
+            Select transaction type
+          </option>
+          <option value="">All</option>
+          <option value="masuk">Masuk</option>
+          <option value="keluar">Keluar</option>
+        </select>
+      </div>
       <div className="flex flex-col mt-6">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -106,9 +155,21 @@ export default function Dashboard() {
                     </th>
                     <th
                       scope="col"
+                      className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
+                    >
+                      Lokasi Rak
+                    </th>
+                    <th
+                      scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
                       Nama Petugas
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
+                    >
+                      Nama Produk
                     </th>
                     <th
                       scope="col"
@@ -132,12 +193,12 @@ export default function Dashboard() {
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
                     >
-                      Detail
+                      Action
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {transaksi?.map((produk, i) => (
+                  {currentItems?.map((produk, i) => (
                     <tr
                       key={i}
                       className="transition-all hover:bg-gray-100 hover:shadow-lg"
@@ -146,7 +207,13 @@ export default function Dashboard() {
                         {produk.receiptID}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {produk.id_rak}
+                      </td>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {produk.karyawan.nama}
+                      </td>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {produk.produk.namaproduk}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {produk.jumlah}
@@ -158,12 +225,51 @@ export default function Dashboard() {
                         {produk.jenis_transaksi}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        <Button variant="link">Detail</Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant={"destructive"}>Delete</Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>
+                                Apakah anda yakin ingin menghapus user ?
+                              </AlertDialogTitle>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction
+                                // onClick={() => handleDeleteUser(item.id)}
+                              >
+                                Continue
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+              <div className="flex justify-between items-center mt-2">
+                <Button
+                  className="m-2"
+                  onClick={() =>
+                    setCurrentPage((old) => Math.max(old - 1, 1, totalPages))
+                  }
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </Button>
+                <Button
+                  className="m-2"
+                  onClick={() =>
+                    setCurrentPage((old) => Math.min(old + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </Button>
+              </div>
             </div>
           </div>
         </div>

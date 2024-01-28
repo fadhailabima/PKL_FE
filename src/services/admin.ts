@@ -103,3 +103,26 @@ export const deleteUser = async (token: string, id: number) => {
     throw error;
   }
 };
+
+export const changeStatus = async (
+  token: string,
+  id: number,
+  status: string
+) => {
+  try {
+    console.log("status", status);
+    const response = await axios.post(
+      `http://localhost:8000/api/changeStatus/${id}`,
+      {
+        status: status,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  } catch (error) {
+    throw error;
+  }
+};

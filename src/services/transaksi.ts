@@ -4,12 +4,12 @@ export type Transaksi = {
   receiptID: string;
   id_produk: string;
   id_rak: string;
-  id_slotrak: string;
   id_karyawan: string;
   jumlah: string;
   tanggal_transaksi: string;
   jenis_transaksi: string;
   karyawan: Karyawan;
+  produk: Produk;
 };
 
 export type Karyawan = {
@@ -20,6 +20,13 @@ export type Karyawan = {
   handphone?: string;
   status: string;
   foto: null;
+};
+
+export type Produk = {
+  idproduk: string;
+  namaproduk: string;
+  jenisproduk: string;
+  value: string;
 }
 
 export const getTransaksi = async (token: string): Promise<Transaksi[]> => {
