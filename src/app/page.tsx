@@ -25,10 +25,16 @@ export default function Home() {
         console.log("ini berhasil login");
         localStorage.setItem("token", res.token);
         localStorage.setItem("level", res.level);
-        router.push("/dashboard");
+
+        // Check the level of the user and route accordingly
+        if (res.level === "admin") {
+          router.push("/dashboard");
+        } else if (res.level === "karyawan") {
+          router.push("/dashboard-karyawan");
+        }
       }
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error) {
+      console.error(error);
     }
   };
 

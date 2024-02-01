@@ -1,12 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Transaksi, getTransaksi } from "@/services/transaksi";
+import { Transaksi, getTransaksibyKaryawan} from "@/services/karyawan";
 import { Button } from "@/components/ui/button";
 import { Count, getCount } from "@/services/admin";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -33,7 +32,7 @@ export default function Dashboard() {
 
   const [transaksi, saveData] = useState<Transaksi[] | null>(null);
   const ambilData = async (token: string) => {
-    const res = await getTransaksi(token);
+    const res = await getTransaksibyKaryawan(token);
     saveData(res);
   };
 
@@ -64,51 +63,7 @@ export default function Dashboard() {
       <div className="flex flex-col items-start justify-between pb-6 space-y-4 border-b lg:items-center lg:space-y-0 lg:flex-row">
         <h1 className="text-2xl font-semibold whitespace-nowrap">Dashboard</h1>
       </div>
-      <div className="grid grid-cols-1 gap-5 mt-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="p-4 transition-shadow border rounded-lg shadow-sm hover:shadow-lg">
-          <div className="flex items-start justify-between">
-            <div className="flex flex-col space-y-2">
-              <span className="text-gray-400">Total Produk</span>
-              <span className="text-lg font-semibold">
-                {count?.jumlah_produk}
-              </span>
-            </div>
-            <div className="p-8"></div>
-          </div>
-        </div>
-        <div className="p-4 transition-shadow border rounded-lg shadow-sm hover:shadow-lg">
-          <div className="flex items-start justify-between">
-            <div className="flex flex-col space-y-2">
-              <span className="text-gray-400">Total User</span>
-              <span className="text-lg font-semibold">
-                {count?.jumlah_user}
-              </span>
-            </div>
-            <div className="p-8"></div>
-          </div>
-        </div>
-        <div className="p-4 transition-shadow border rounded-lg shadow-sm hover:shadow-lg">
-          <div className="flex items-start justify-between">
-            <div className="flex flex-col space-y-2">
-              <span className="text-gray-400">Total Rak</span>
-              <span className="text-lg font-semibold">{count?.jumlah_rak}</span>
-            </div>
-            <div className="p-8"></div>
-          </div>
-        </div>
-        <div className="p-4 transition-shadow border rounded-lg shadow-sm hover:shadow-lg">
-          <div className="flex items-start justify-between">
-            <div className="flex flex-col space-y-2">
-              <span className="text-gray-400">Total Transaksi</span>
-              <span className="text-lg font-semibold">
-                {count?.jumlah_transaksi}
-              </span>
-            </div>
-            <div className="p-8"></div>
-          </div>
-        </div>
-      </div>
-      <h3 className="mt-6 text-xl">Transaksi</h3>
+      <h3 className="mt-6 text-xl">Riwayat Transaksi</h3>
       <div className="flex justify-between items-center">
         <Input
           className="mt-2"
@@ -144,12 +99,6 @@ export default function Dashboard() {
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
                       ID Transaksi
-                    </th>
-                    <th
-                      scope="col"
-                      className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
-                    >
-                      Nama Petugas
                     </th>
                     <th
                       scope="col"
@@ -193,12 +142,6 @@ export default function Dashboard() {
                     >
                       Detail
                     </th>
-                    <th
-                      scope="col"
-                      className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
-                    >
-                      Action
-                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -209,9 +152,6 @@ export default function Dashboard() {
                     >
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {produk.receiptID}
-                      </td>
-                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {produk.karyawan.nama}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {produk.produk.namaproduk}
@@ -235,28 +175,6 @@ export default function Dashboard() {
                         <Link href={"/transaksi-report/" + produk.receiptID}>
                           <Button variant="link">Detail</Button>
                         </Link>
-                      </td>
-                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button variant={"destructive"}>Delete</Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>
-                                Apakah anda yakin ingin menghapus user ?
-                              </AlertDialogTitle>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction
-                              // onClick={() => handleDeleteUser(item.id)}
-                              >
-                                Continue
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
                       </td>
                     </tr>
                   ))}

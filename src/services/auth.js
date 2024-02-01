@@ -46,14 +46,22 @@ export const logout = async (token) => {
   }
 };
 
-export const signUp = async (username, nama, level, password) => {
+export const signUp = async (token, username, nama, level, password) => {
   try {
-    const response = await axios.post("http://localhost:8000/api/signup", {
-      username,
-      nama,
-      level,
-      password,
-    });
+    const response = await axios.post(
+      "http://localhost:8000/api/signup",
+      {
+        username,
+        nama,
+        level,
+        password,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (response.status === 201) {
       console.log("Signup successful:", response.data.message);

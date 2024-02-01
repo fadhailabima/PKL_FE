@@ -46,3 +46,29 @@ export const getTransaksi = async (token: string): Promise<Transaksi[]> => {
     throw new Error(`Terjadi kesalahan dalam mendapatkan data admin`);
   }
 };
+
+export type TransaksiReport = {
+  receiptID: string;
+  id_rakslot: string;
+  id_rak: string;
+  jumlah: string;
+};
+
+export const showTransaksiReport = async (token: string, receiptID: string) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8000/api/getDetailTransaksi/${receiptID}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+

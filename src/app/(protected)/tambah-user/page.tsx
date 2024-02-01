@@ -27,10 +27,16 @@ export default function Profile() {
   const router = useRouter();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
-  const handlesignUp = async (e: React.MouseEvent<HTMLElement>) => {
+  const handleSignUp = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     try {
-      const res = await signUp(username, nama, level, password);
+      const token = localStorage.getItem("token"); // Get token from local storage
+      if (!token) {
+        console.error("Token not found.");
+        // Handle case where token is not available
+        return;
+      }
+      const res = await signUp(token, username, nama, level, password);
       if (res !== undefined && res !== null) {
         console.log("ini berhasil signup");
         localStorage.setItem("token", res);
@@ -114,7 +120,7 @@ export default function Profile() {
           </div>
           <Button
             className="w-full mt-6 mb-3 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
-            onClick={handlesignUp}
+            onClick={handleSignUp}
           >
             Sign Up
           </Button>

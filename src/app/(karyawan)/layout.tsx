@@ -1,4 +1,4 @@
-import Sidebar from "@/components/sidebar";
+import SidebarKaryawan from "@/components/sidebarKaryawan";
 import React from "react";
 import Header from "@/components/header";
 import PageWrapper from "@/components/pagewrapper";
@@ -13,7 +13,7 @@ export default function LayoutProtected({ children }: Props) {
     <html lang="en">
       <body className="bg-white">
         <div className="flex">
-          <Sidebar />
+          <SidebarKaryawan />
           <main className="flex-1">
             <MarginWidthWrapper>
               <Header />
