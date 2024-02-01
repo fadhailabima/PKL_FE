@@ -58,8 +58,8 @@ export default function manageUser() {
 
     setShowSuccessAlert(true);
     setTimeout(() => {
-      window.location.reload();
-    }, 3000);
+      getData(localStorage.getItem("token")!);
+    }, 100);
   };
 
   const handleChangeStatus = async (id: number, newStatus: string) => {

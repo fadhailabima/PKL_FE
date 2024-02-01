@@ -34,7 +34,7 @@ export default function DetailRakSlot({
   }, []);
   const filteredItems = selected?.filter(
     (item) =>
-      (item.nama_produk?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+      (item.lantai?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
         item.id_rakslot.includes(searchTerm)) &&
       (filterTerm === "" || item.status === filterTerm)
   );
@@ -94,25 +94,25 @@ export default function DetailRakSlot({
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      Nama Produk
+                      Posisi
                     </th>
                     <th
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      X Coordinate
+                      Lantai
                     </th>
                     <th
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      Y Coordinate
+                      Kapasitas Maksimal
                     </th>
                     <th
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      Z Coordinate
+                      Kapasitas Terpakai
                     </th>
                     <th
                       scope="col"
@@ -132,16 +132,16 @@ export default function DetailRakSlot({
                         {item.id_rakslot}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {item.nama_produk}
+                        {item.posisi}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {item.Xcoordinate}
+                        {item.lantai}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {item.Ycoordinate}
+                        {item.kapasitas_maksimal}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {item.Zcoordinate}
+                        {item.kapasitas_terpakai}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {item.status}

@@ -155,12 +155,6 @@ export default function Dashboard() {
                     </th>
                     <th
                       scope="col"
-                      className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
-                    >
-                      Lokasi Rak
-                    </th>
-                    <th
-                      scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
                       Nama Petugas
@@ -187,7 +181,25 @@ export default function Dashboard() {
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
                     >
+                      Kode Produksi
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
+                    >
+                      Tanggal Expired
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
+                    >
                       Jenis Transaksi
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
+                    >
+                      Detail
                     </th>
                     <th
                       scope="col"
@@ -207,9 +219,6 @@ export default function Dashboard() {
                         {produk.receiptID}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {produk.id_rak}
-                      </td>
-                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {produk.karyawan.nama}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
@@ -222,7 +231,20 @@ export default function Dashboard() {
                         {produk.tanggal_transaksi}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {produk.kode_produksi}
+                      </td>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {produk.tanggal_expired}
+                      </td>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {produk.jenis_transaksi}
+                      </td>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        <Button
+                          // onClick={() => router.push(`/transaksi/${produk.id}`)}
+                        >
+                          Detail
+                        </Button>
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         <AlertDialog>
@@ -238,7 +260,7 @@ export default function Dashboard() {
                             <AlertDialogFooter>
                               <AlertDialogCancel>Cancel</AlertDialogCancel>
                               <AlertDialogAction
-                                // onClick={() => handleDeleteUser(item.id)}
+                              // onClick={() => handleDeleteUser(item.id)}
                               >
                                 Continue
                               </AlertDialogAction>

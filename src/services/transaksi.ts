@@ -3,12 +3,13 @@ import axios from "axios";
 export type Transaksi = {
   receiptID: string;
   id_produk: string;
-  id_rak: string;
   id_karyawan: string;
   jumlah: string;
   tanggal_transaksi: string;
   jenis_transaksi: string;
   karyawan: Karyawan;
+  kode_produksi: string;
+  tanggal_expired: string;
   produk: Produk;
 };
 

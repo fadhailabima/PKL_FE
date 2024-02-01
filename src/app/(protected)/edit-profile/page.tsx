@@ -74,7 +74,7 @@ export default function editProfile() {
     setTimeout(() => {
       // Pindahkan router.push ke dalam setTimeout
       router.push("/profile");
-    }, 2500);
+    }, 1000);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

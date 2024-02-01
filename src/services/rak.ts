@@ -26,10 +26,10 @@ export const getRak = async (token: string): Promise<Rak[]> => {
 
 export type RakSlot = {
   id_rakslot: string;
-  nama_produk: string;
-  Xcoordinate: string;
-  Ycoordinate: string;
-  Zcoordinate: string;
+  posisi: string;
+  lantai: string;
+  kapasitas_maksimal: string;
+  kapasitas_terpakai: string;
   status: string;
 };
 
@@ -52,14 +52,14 @@ export const showRakSlotByID = async (token: string, idrak: string) => {
 
 export const addRak = async (
   token: string,
-  kapasitas: string,
+  kapasitas_maksimal: string,
   status: string
 ) => {
   try {
     const response = await axios.post(
       `http://localhost:8000/api/tambahRakdanSlot`,
       {
-        kapasitas,
+        kapasitas_maksimal,
         status,
       },
       {

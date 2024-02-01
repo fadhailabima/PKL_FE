@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 export default function tambahRak() {
-  const [kapasitas, setKapasitas] = useState(""); // assuming it's a number
+  const [kapasitas_maksimal, setKapasitas] = useState(""); // assuming it's a number
   const [status, setStatus] = useState(""); // assuming it's a string
   const [error, setError] = useState(null);
   const router = useRouter();
@@ -22,7 +22,7 @@ export default function tambahRak() {
       if (!token) {
         throw new Error("No token found");
       }
-      const res = await addRak(token, kapasitas, status);
+      const res = await addRak(token, kapasitas_maksimal, status);
       if (res) {
         console.log("Successfully added Rak");
         router.push("/tambah-rak");

@@ -90,18 +90,6 @@ export default function manageRak() {
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      Kapasitas
-                    </th>
-                    <th
-                      scope="col"
-                      className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
-                    >
-                      Kapasitas Sisa
-                    </th>
-                    <th
-                      scope="col"
-                      className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
-                    >
                       Status
                     </th>
                     <th
@@ -120,12 +108,6 @@ export default function manageRak() {
                     >
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {item.idrak}
-                      </td>
-                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {item.kapasitas}
-                      </td>
-                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {item.kapasitas_sisa}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         <Button>{item.status}</Button>
