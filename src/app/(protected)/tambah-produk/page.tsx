@@ -12,12 +12,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { addProduk } from "@/services/produk";
+import { addProduk, Produk, getProduk } from "@/services/produk";
 import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-export default function Profile() {
+export default function TambahProduk() {
   // const [position, setPosition] = React.useState("karyawan");
   const [namaproduk, setNamaproduk] = useState("");
   const [jenisproduk, setJenisproduk] = useState("");
@@ -25,6 +25,21 @@ export default function Profile() {
   const [error, setError] = useState(false);
   const router = useRouter();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [data, setData] = useState<Produk[] | null>(null);
+
+  const getData = async (token: string) => {
+    const res = await getProduk(token);
+    setData(res);
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/");
+    } else {
+      getData(token);
+    }
+  }, []);
 
   const handleAddProduk = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -75,8 +90,10 @@ export default function Profile() {
           </label>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button className="w-56 mt-2 mb-2 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans">
-                {jenisproduk}
+              <Button
+                className={`w-56 mt-2 mb-2 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans ${jenisproduk}`}
+              >
+                {jenisproduk || "Select a product"}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">

@@ -52,7 +52,7 @@ export default function Profile() {
     // Reload the page after a short delay (adjust the delay if needed)
     setTimeout(() => {
       window.location.reload();
-    }, 2500);
+    }, 1000);
   };
   return (
     <div className="h-250 py-2 flex justify-center items-center">

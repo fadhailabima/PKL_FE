@@ -4,7 +4,11 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { getAdmin, Admin, updateProfile } from "@/services/admin";
+import {
+  getKaryawan,
+  Karyawan,
+  updateProfileKaryawan,
+} from "@/services/karyawan";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
@@ -13,7 +17,7 @@ import Link from "next/link";
 
 export default function editProfile() {
   const router = useRouter();
-  const [data, setData] = useState<Admin | null>(null);
+  const [data, setData] = useState<Karyawan | null>(null);
   const [alamat, setAlamat] = useState("");
   const [email, setEmail] = useState("");
   const [handphone, setHandphone] = useState("");
@@ -23,7 +27,7 @@ export default function editProfile() {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
   const getData = async (token: string) => {
-    const res = await getAdmin(token);
+    const res = await getKaryawan(token);
     setData(res);
   };
 
@@ -53,13 +57,14 @@ export default function editProfile() {
 
       console.log("ini token", token);
 
-      const updated = await updateProfile(
+      const updated = await updateProfileKaryawan(
         token,
         alamat,
         email,
         handphone,
         foto ?? null
       );
+
       console.log("Profile updated successfully", updated);
 
       setShowSuccessAlert(true); // Set success state only when update is successful
@@ -97,7 +102,7 @@ export default function editProfile() {
           Edit Profil
         </h2>
         <div>
-          <Link href="/profile">
+          <Link href="/profile-karyawan">
             <Icon
               icon="iconamoon:arrow-left-5-circle-fill"
               className="h-9 w-9 flex items-center justify-center text-center"

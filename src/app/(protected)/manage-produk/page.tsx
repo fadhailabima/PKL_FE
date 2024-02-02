@@ -18,7 +18,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-export default function manageRak() {
+export default function manageProduk() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterTerm, setFilterTerm] = useState("");
@@ -58,8 +58,8 @@ export default function manageRak() {
     setShowSuccessAlert(true);
     setError(false);
     setTimeout(() => {
-      window.location.reload();
-    }, 1000);
+      getData(localStorage.getItem("token")!);
+    }, 100);
   };
 
   const filteredItems = data?.filter(
@@ -186,9 +186,9 @@ export default function manageRak() {
                   ))}
                 </tbody>
               </table>
-              {error && (
+              {/* {error && (
                 <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4" />
+                  <AlertCircle className="h-4 w-4 mt-5" />
                   <AlertTitle>Gagal hapus produk</AlertTitle>
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
@@ -199,7 +199,7 @@ export default function manageRak() {
                   <AlertTitle>Berhasil hapus produk</AlertTitle>
                   <AlertDescription>Produk berhasil dihapus</AlertDescription>
                 </Alert>
-              )}
+              )} */}
 
               <div className="flex justify-between items-center mt-2">
                 <Button
@@ -220,6 +220,20 @@ export default function manageRak() {
                 </Button>
               </div>
             </div>
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4 mt-5" />
+                <AlertTitle>Gagal hapus produk</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            {showSuccessAlert && (
+              <Alert>
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Berhasil hapus produk</AlertTitle>
+                <AlertDescription>Produk berhasil dihapus</AlertDescription>
+              </Alert>
+            )}
           </div>
         </div>
       </div>

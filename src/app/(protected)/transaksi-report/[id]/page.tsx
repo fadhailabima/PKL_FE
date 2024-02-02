@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-export default function DetailRakSlot({
+export default function TransaksiReport({
   params: { id },
 }: {
   params: { id: string };
@@ -47,7 +47,7 @@ export default function DetailRakSlot({
     <div className="flex-1 max-h-full p-5">
       <div className="flex justify-between items-center">
         <h2 className="text-gray-500 mt-6 text-xl text-center font-semibold pb-1">
-          Detail Rak Slot
+          Detail Transaksi
         </h2>
         <Input
           className="mt-6"

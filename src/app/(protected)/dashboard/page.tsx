@@ -1,12 +1,21 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Transaksi, getTransaksi } from "@/services/transaksi";
+import { Transaksi, getTransaksi, deleteTransaksi } from "@/services/transaksi";
 import { Button } from "@/components/ui/button";
 import { Count, getCount } from "@/services/admin";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -14,6 +23,8 @@ export default function Dashboard() {
   const [filterTerm, setFilterTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
+  const [error, setError] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
   const [count, setCount] = useState<Count | null>(null);
 
@@ -35,6 +46,25 @@ export default function Dashboard() {
   const ambilData = async (token: string) => {
     const res = await getTransaksi(token);
     saveData(res);
+  };
+
+  const handleDeleteTransaksi = async (receiptID: string) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const res = await deleteTransaksi(token, receiptID);
+        if (res !== undefined) {
+          ambilData(token);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    setShowSuccessAlert(true);
+    setTimeout(() => {
+      ambilData(localStorage.getItem("token")!);
+    }, 100);
   };
 
   console.log(transaksi);
@@ -244,13 +274,13 @@ export default function Dashboard() {
                           <AlertDialogContent>
                             <AlertDialogHeader>
                               <AlertDialogTitle>
-                                Apakah anda yakin ingin menghapus user ?
+                                Apakah anda yakin ingin menghapus transaksi ?
                               </AlertDialogTitle>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                               <AlertDialogCancel>Cancel</AlertDialogCancel>
                               <AlertDialogAction
-                              // onClick={() => handleDeleteUser(item.id)}
+                              onClick={() => handleDeleteTransaksi(produk.receiptID)}
                               >
                                 Continue
                               </AlertDialogAction>

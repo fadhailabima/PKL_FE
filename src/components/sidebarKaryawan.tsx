@@ -66,7 +66,7 @@ export default function SidebarKaryawan() {
     <div className="md:w-60 bg-white h-screen flex-1 fixed border-r border-zinc-200 hidden md:flex">
       <div className="flex flex-col space-y-6 w-full">
         <Link
-          href="/profile"
+          href="/profile-karyawan"
           className="flex flex-row space-x-3 items-center justify-center md:justify-start md:px-6 border-b border-zinc-200 h-14 w-full"
         >
           <User
@@ -80,14 +80,14 @@ export default function SidebarKaryawan() {
         </Link>
         <div className="flex flex-col space-y-5  md:px-4 ">
           <Link
-            href="/dashboard"
+            href="/dashboard-karyawan"
             className="flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100"
           >
             <Icon icon="lucide:home" width="24" height="24" />
             <span className="font-semibold text-xl flex">Home</span>
           </Link>
           <Link
-            href="/manage-rak
+            href="/transaksi-masuk
             "
             className="flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100"
           >
@@ -95,7 +95,7 @@ export default function SidebarKaryawan() {
             <span className="font-semibold text-xl flex">Transaksi Masuk</span>
           </Link>
           <Link
-            href="/manage-produk
+            href="/transaksi-keluar
             "
             className="flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100"
           >

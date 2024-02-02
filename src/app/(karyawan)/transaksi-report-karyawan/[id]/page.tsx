@@ -1,23 +1,27 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Rak, getRak, changeStatusRak } from "@/services/rak";
+import { TransaksiReport, showTransaksiReport } from "@/services/transaksi";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-export default function manageRak() {
+export default function TransaksiDetail({
+  params: { id },
+}: {
+  params: { id: string };
+}) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterTerm, setFilterTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
-    const [status, setStatus] = useState<string>("tersedia"); 
-  const [data, setData] = useState<Rak[] | null>(null);
-
-  const getData = async (token: string) => {
-    const res = await getRak(token);
-    setData(res);
+  const [selected, setSelected] = useState<TransaksiReport[] | null>(null);
+  console.log(selected);
+  const getSelected = async (token: string, id: string) => {
+    const res = await showTransaksiReport(token, id);
+    console.log(res.data);
+    setSelected(res.data);
   };
 
   useEffect(() => {
@@ -25,44 +29,25 @@ export default function manageRak() {
     if (!token) {
       router.push("/");
     } else {
-      getData(token);
+      getSelected(token, id);
     }
   }, []);
-
-  const handleChangeStatus = async (idrak: string, newStatus: string) => {
-    try {
-      const token = localStorage.getItem("token");
-      if (token) {
-        const res = await changeStatusRak(token, idrak, newStatus);
-        if (res !== undefined) {
-          getData(token);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    setTimeout(() => {
-      getData(localStorage.getItem("token")!);
-    }, 100);
-  };
-
-  const filteredItems = data?.filter(
+  const filteredItems = selected?.filter(
     (item) =>
-      (item.idrak.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.kapasitas_sisa.includes(searchTerm)) &&
-      (filterTerm === "" || item.status === filterTerm)
+      (item.id_rakslot?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+        item.id_rak.includes(searchTerm)) &&
+      (filterTerm === "" || item.id_rakslot === filterTerm)
   );
   const totalPages = Math.ceil((filteredItems?.length ?? 0) / itemsPerPage);
   const currentItems = filteredItems?.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
   return (
     <div className="flex-1 max-h-full p-5">
       <div className="flex justify-between items-center">
         <h2 className="text-gray-500 mt-6 text-xl text-center font-semibold pb-1">
-          Daftar Rak
+          Detail Transaksi
         </h2>
         <Input
           className="mt-6"
@@ -72,22 +57,10 @@ export default function manageRak() {
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search..."
         />
-        <select
-          value={filterTerm}
-          onChange={(e) => setFilterTerm(e.target.value)}
-          className="mt-6 border border-gray-300 rounded-lg shadow-sm focus:outline-none text-xs font-medium tracking-wider  text-gray-500 uppercase"
-          style={{ width: "250px", height: "40px" }}
-        >
-          <option value="" disabled selected>
-            Select Status
-          </option>
-          <option value="">All</option>
-          <option value="tersedia">Tersedia</option>
-          <option value="tidak tersedia">Tidak Tersedia</option>
-        </select>
+        <div></div>
         <div>
-          <Link href="/tambah-rak">
-            <Button className="mt-6">Tambah Rak</Button>
+          <Link href="/dashboard-karyawan">
+            <Button className="mt-6">Back</Button>
           </Link>
         </div>
       </div>
@@ -108,13 +81,13 @@ export default function manageRak() {
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      Status
+                      ID Rak Slot
                     </th>
                     <th
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      Detail Rak Slot
+                      Jumlah Kapasitas
                     </th>
                   </tr>
                 </thead>
@@ -125,37 +98,18 @@ export default function manageRak() {
                       className="transition-all hover:bg-gray-100 hover:shadow-lg"
                     >
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {item.idrak}
+                        {item.id_rak}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        <Button
-                          onClick={() => {
-                            const newStatus =
-                              item.status === "tersedia"
-                                ? "tidak tersedia"
-                                : "tersedia";
-                            handleChangeStatus(item.idrak, newStatus);
-                          }}
-                        >
-                          {item.status}
-                        </Button>
+                        {item.id_rakslot}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {item.status === "tidak tersedia" ? (
-                          <Button variant="link" disabled>
-                            Detail
-                          </Button>
-                        ) : (
-                          <Link href={"/detail-rak-slot/" + item.idrak}>
-                            <Button variant="link">Detail</Button>
-                          </Link>
-                        )}
+                        {item.jumlah}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-
               <div className="flex justify-between items-center mt-2">
                 <Button
                   className="m-2"

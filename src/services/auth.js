@@ -75,39 +75,3 @@ export const signUp = async (token, username, nama, level, password) => {
     );
   }
 };
-
-export const updateProfile = async (token, alamat, email, handphone, foto) => {
-  try {
-    console.log("alamat", alamat);
-    console.log("email", email);
-    console.log("handphone", handphone);
-
-    const formData = new FormData();
-    formData.append("alamat", alamat);
-    formData.append("email", email);
-    formData.append("handphone", handphone);
-
-    if (foto) {
-      formData.append("foto", foto);
-    }
-    if (alamat)
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
-
-    const response = await axios.post(
-      "http://localhost:8000/api/updateProfile",
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};

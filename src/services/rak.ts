@@ -74,3 +74,26 @@ export const addRak = async (
     throw error;
   }
 };
+
+export const changeStatusRak = async (
+  token: string,
+  idrak: string,
+  status: string
+) => {
+  try {
+    console.log("status", status);
+    const response = await axios.post(
+      `http://localhost:8000/api/changeStatusRak/${idrak}`,
+      {
+        status: status,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  } catch (error) {
+    throw error;
+  }
+};

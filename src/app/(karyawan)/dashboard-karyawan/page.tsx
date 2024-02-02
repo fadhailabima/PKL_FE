@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Transaksi, getTransaksibyKaryawan} from "@/services/karyawan";
+import { Transaksi, getTransaksibyKaryawan } from "@/services/karyawan";
 import { Button } from "@/components/ui/button";
 import { Count, getCount } from "@/services/admin";
 import { Input } from "@/components/ui/input";
@@ -172,7 +172,11 @@ export default function Dashboard() {
                         {produk.jenis_transaksi}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        <Link href={"/transaksi-report/" + produk.receiptID}>
+                        <Link
+                          href={
+                            "/transaksi-report-karyawan/" + produk.receiptID
+                          }
+                        >
                           <Button variant="link">Detail</Button>
                         </Link>
                       </td>
