@@ -27,7 +27,9 @@ export default function tambahRak() {
   const [error, setError] = useState(null);
   const router = useRouter();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  const [transaksi, setTransaksi] = useState<Transaksi[] | null>(null);
+  const [transaksi, setTransaksi] = useState<{namaproduk: string}[] | null>(
+    null
+  );
 
   const getTransaksi = async (token: string) => {
     const res = await getTransaksiReport(token);
@@ -41,7 +43,7 @@ export default function tambahRak() {
     } else {
       getTransaksi(token);
     }
-  });
+  }, []);
 
   const handleAddTransaksi = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -64,6 +66,9 @@ export default function tambahRak() {
       window.location.reload();
     }, 500);
   };
+
+  console.log("transaksi", transaksi);
+
   return (
     <div className="h-250 py-2 flex justify-center items-center">
       <div className="lg:w-2/5 md:w-1/2 w-2/3">
@@ -97,12 +102,9 @@ export default function tambahRak() {
                   value={nama_produk}
                   onValueChange={setProduk}
                 >
-                  {transaksi?.map((produk) => (
-                    <DropdownMenuRadioItem
-                      key={produk.id_produk}
-                      value={produk.produk.namaproduk}
-                    >
-                      {produk.produk.namaproduk}
+                  {transaksi?.map((item, index) => (
+                    <DropdownMenuRadioItem key={index} value={item.namaproduk}>
+                      {item.namaproduk}
                     </DropdownMenuRadioItem>
                   ))}
                 </DropdownMenuRadioGroup>

@@ -1,7 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Produk, getProduk, deleteProduk } from "@/services/produk";
+import {
+  jenisProduk,
+  getJenisProduk,
+  deleteJenisProduk,
+} from "@/services/produk";
 import Link from "next/link";
 import {
   AlertDialog,
@@ -21,15 +25,14 @@ import { Input } from "@/components/ui/input";
 export default function manageProduk() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterTerm, setFilterTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [error, setError] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  const [data, setData] = useState<Produk[] | null>(null);
+  const [data, setData] = useState<jenisProduk[] | null>(null);
 
   const getData = async (token: string) => {
-    const res = await getProduk(token);
+    const res = await getJenisProduk(token);
     setData(res);
   };
 
@@ -42,11 +45,11 @@ export default function manageProduk() {
     }
   }, []);
 
-  const handleDeleteProduk = async (idproduk: string) => {
+  const handleDeleteJenisProduk = async (id: number) => {
     try {
       const token = localStorage.getItem("token");
       if (token) {
-        const res = await deleteProduk(token, idproduk);
+        const res = await deleteJenisProduk(token, id);
         if (res !== undefined) {
           getData(token);
         }
@@ -58,18 +61,14 @@ export default function manageProduk() {
     setShowSuccessAlert(true);
     setError(false);
     setTimeout(() => {
-      getData(localStorage.getItem("token")!);
-    }, 100);
+        window.location.reload();
+    }, 1000);
   };
 
   const searchTermLower = searchTerm?.toLowerCase() || "";
-  const filterTermLower = filterTerm || "";
 
-  const filteredItems = data?.filter(
-    (item) =>
-      ((item.namaproduk?.toLowerCase().includes(searchTermLower) ||
-        item.idproduk?.includes(searchTermLower)) &&
-        (!item.jenis_produk || filterTermLower === "" || item.jenis_produk.jenisproduk === filterTermLower))
+  const filteredItems = data?.filter((item) =>
+    item.jenisproduk?.toLowerCase().includes(searchTermLower)
   );
   const totalPages = Math.ceil((filteredItems?.length ?? 0) / itemsPerPage);
   const currentItems = filteredItems?.slice(
@@ -81,7 +80,7 @@ export default function manageProduk() {
     <div className="flex-1 max-h-full p-5">
       <div className="flex justify-between items-center">
         <h2 className="text-gray-500 mt-6 text-xl text-center font-semibold pb-1">
-          Daftar Produk
+          Daftar Jenis Produk
         </h2>
         <Input
           className="mt-6"
@@ -91,25 +90,9 @@ export default function manageProduk() {
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search..."
         />
-        <select
-          value={filterTerm}
-          onChange={(e) => setFilterTerm(e.target.value)}
-          className="mt-6 border border-gray-300 rounded-lg shadow-sm focus:outline-none text-xs font-medium tracking-wider  text-gray-500 uppercase"
-          style={{ width: "250px", height: "40px" }}
-        >
-          <option value="" disabled selected>
-            Select Product Type
-          </option>
-          <option value="">All</option>
-          <option value="Pupuk Tunggal">Pupuk Tunggal</option>
-          <option value="Pupuk Majemuk">Pupuk Majemuk</option>
-          <option value="Pupuk Soluble">Pupuk Soluble</option>
-          <option value="Pupuk Organik">Pupuk Organik</option>
-          <option value="Pestisida">Pestisida</option>
-        </select>
         <div>
-          <Link href="/tambah-produk">
-            <Button className="mt-6">Tambah Produk</Button>
+          <Link href="/tambah-jenis-produk">
+            <Button className="mt-6">Tambah Jenis Produk</Button>
           </Link>
         </div>
       </div>
@@ -124,13 +107,7 @@ export default function manageProduk() {
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      ID Produk
-                    </th>
-                    <th
-                      scope="col"
-                      className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
-                    >
-                      Nama Produk
+                      ID
                     </th>
                     <th
                       scope="col"
@@ -153,13 +130,10 @@ export default function manageProduk() {
                       className="transition-all hover:bg-gray-100 hover:shadow-lg"
                     >
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {item.idproduk}
+                        {item.id}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {item.namaproduk}
-                      </td>
-                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {item.jenis_produk.jenisproduk}
+                        {item.jenisproduk}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         <AlertDialog>
@@ -175,9 +149,9 @@ export default function manageProduk() {
                             <AlertDialogFooter>
                               <AlertDialogCancel>Cancel</AlertDialogCancel>
                               <AlertDialogAction
-                                onClick={() =>
-                                  handleDeleteProduk(item.idproduk)
-                                }
+                              onClick={() =>
+                                handleDeleteJenisProduk(item.id)
+                              }
                               >
                                 Continue
                               </AlertDialogAction>
@@ -189,20 +163,6 @@ export default function manageProduk() {
                   ))}
                 </tbody>
               </table>
-              {/* {error && (
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4 mt-5" />
-                  <AlertTitle>Gagal hapus produk</AlertTitle>
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
-              {showSuccessAlert && (
-                <Alert>
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Berhasil hapus produk</AlertTitle>
-                  <AlertDescription>Produk berhasil dihapus</AlertDescription>
-                </Alert>
-              )} */}
 
               <div className="flex justify-between items-center mt-2">
                 <Button

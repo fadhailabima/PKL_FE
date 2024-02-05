@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { addProduk, Produk, getProduk } from "@/services/produk";
+import { addProduk, Produk, getProduk, jenisProduk, getJenisProduk } from "@/services/produk";
 import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
@@ -26,6 +26,21 @@ export default function TambahProduk() {
   const router = useRouter();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [data, setData] = useState<Produk[] | null>(null);
+  const [jenis_produk, setJenisProduk] = useState<jenisProduk[] | null>(null);
+
+  const JenisProduk = async (token: string) => {
+    const res = await getJenisProduk(token);
+    setJenisProduk(res);
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/");
+    } else {
+      JenisProduk(token);
+    }
+  }, []);
 
   const getData = async (token: string) => {
     const res = await getProduk(token);
@@ -103,21 +118,11 @@ export default function TambahProduk() {
                 value={jenisproduk}
                 onValueChange={setJenisproduk}
               >
-                <DropdownMenuRadioItem value="Pupuk Tunggal">
-                  Pupuk Tunggal
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="Pupuk Majemuk">
-                  Pupuk Majemuk
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="Pupuk Soluble">
-                  Pupuk Soluble
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="Pupuk Organik">
-                  Pupuk Organik
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="Pestisida">
-                  Pestisida
-                </DropdownMenuRadioItem>
+                {jenis_produk?.map((item, index) => (
+                  <DropdownMenuRadioItem key={index} value={item.jenisproduk}>
+                    {item.jenisproduk}
+                  </DropdownMenuRadioItem>
+                ))}
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu>

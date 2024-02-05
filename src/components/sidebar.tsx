@@ -103,6 +103,16 @@ export default function Sidebar() {
             <span className="font-semibold text-xl flex">Manage Produk</span>
           </Link>
           <Link
+            href="/manage-jenis-produk
+            "
+            className="flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100"
+          >
+            <Icon icon="lucide:circle-fading-plus" width="24" height="24" />
+            <span className="font-semibold text-xl flex">
+              Manage Jenis Produk
+            </span>
+          </Link>
+          <Link
             href="/manage-user
             "
             className="flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100"

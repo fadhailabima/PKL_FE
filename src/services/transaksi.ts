@@ -10,7 +10,7 @@ export type Transaksi = {
   karyawan: Karyawan;
   kode_produksi: string;
   tanggal_expired: string;
-  produk: Produk;
+  produk: products;
 };
 
 export type Karyawan = {
@@ -23,7 +23,7 @@ export type Karyawan = {
   foto: null;
 };
 
-export type Produk = {
+export type products = {
   idproduk: string;
   namaproduk: string;
   jenisproduk: string;
@@ -114,7 +114,7 @@ export const transaksiMasuk = async (token: string, nama_produk: string, jumlah:
 export const transaksiKeluar = async (token: string, nama_produk: string, jumlah:string) => {
   try {
     const response = await axios.post(
-      `http://localhost:8000/api/tambahtransaksi`,
+      `http://localhost:8000/api/transaksiKeluar`,
       {
         nama_produk,
         jumlah,
@@ -132,7 +132,7 @@ export const transaksiKeluar = async (token: string, nama_produk: string, jumlah
   }
 };
 
-export const getTransaksiReport = async (token: string): Promise<Transaksi[]> => {
+export const getTransaksiReport = async (token: string): Promise<{namaproduk: string}[]> => {
   try {
     const response = await axios.get("http://localhost:8000/api/getAllTransaksiReport", {
       headers: {
@@ -142,7 +142,7 @@ export const getTransaksiReport = async (token: string): Promise<Transaksi[]> =>
 
     console.log(response.data.transaksiReport);
 
-    // Assuming response.data.transaksireport is of type TransaksiReport[]
+    // Assuming response.data.transaksiReport is an array of strings
     return response.data.transaksiReport;
   } catch (error) {
     console.error(error);

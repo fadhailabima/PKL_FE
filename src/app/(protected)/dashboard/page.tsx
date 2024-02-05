@@ -16,6 +16,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -41,6 +43,34 @@ export default function Dashboard() {
       getDetail(token);
     }
   }, []);
+
+  const generatePDFRekap = () => {
+    const input = document.getElementById("rekapTransaksi"); // id of the element to be converted to PDF
+    if (input) {
+      html2canvas(input)
+        .then((canvas) => {
+          const imgData = canvas.toDataURL("image/png");
+          const pdf = new jsPDF("p", "pt", [canvas.width, canvas.height]);
+          console.log(imgData);
+          pdf.addImage(
+            imgData,
+            "PNG",
+            0,
+            0,
+            canvas.width * 0.75, // convert pixels to points
+            canvas.height * 0.75 // convert pixels to points
+          );
+          pdf.save("download.pdf");
+        })
+        .catch((error) => {
+          console.error("Error rendering canvas:", error);
+        });
+    } else {
+      console.error("Element with id 'rekaptransaksi' not found");
+    }
+  };
+
+  // console.log(imgData);
 
   const [transaksi, saveData] = useState<Transaksi[] | null>(null);
   const ambilData = async (token: string) => {
@@ -161,6 +191,15 @@ export default function Dashboard() {
           <option value="masuk">Masuk</option>
           <option value="keluar">Keluar</option>
         </select>
+        {filterTerm === "" && (
+          <Button onClick={generatePDFRekap}>Download Rekap Transaksi </Button>
+        )}
+        {filterTerm === "masuk" && (
+          <Button onClick={generatePDFRekap}>Download Rekap Transaksi Masuk</Button>
+        )}
+        {filterTerm === "keluar" && (
+          <Button onClick={generatePDFRekap}>Download Rekap Transaksi Keluar</Button>
+        )}
       </div>
       <div className="flex flex-col mt-6">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -280,7 +319,9 @@ export default function Dashboard() {
                             <AlertDialogFooter>
                               <AlertDialogCancel>Cancel</AlertDialogCancel>
                               <AlertDialogAction
-                              onClick={() => handleDeleteTransaksi(produk.receiptID)}
+                                onClick={() =>
+                                  handleDeleteTransaksi(produk.receiptID)
+                                }
                               >
                                 Continue
                               </AlertDialogAction>
@@ -311,6 +352,114 @@ export default function Dashboard() {
                 >
                   Next
                 </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex flex-col mt-6"
+        style={{ display: "none" }}
+        id="rekapTransaksi"
+      >
+        <h3 className="mt-6 text-xl">Rekap Transaksi</h3>
+        <div className="flex flex-col mt-6">
+          <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+              <div className="overflow-hidden border-b border-gray-200 rounded-md shadow-md">
+                <table className="min-w-full overflow-x-scroll divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
+                      >
+                        ID Transaksi
+                      </th>
+                      <th
+                        scope="col"
+                        className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
+                      >
+                        Nama Petugas
+                      </th>
+                      <th
+                        scope="col"
+                        className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
+                      >
+                        Nama Produk
+                      </th>
+                      <th
+                        scope="col"
+                        className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
+                      >
+                        Jumlah
+                      </th>
+                      <th
+                        scope="col"
+                        className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
+                      >
+                        Kode Produksi
+                      </th>
+                      <th
+                        scope="col"
+                        className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
+                      >
+                        Tanggal Expired
+                      </th>
+                      <th
+                        scope="col"
+                        className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
+                      >
+                        Tanggal Transaksi
+                      </th>
+                      <th
+                        scope="col"
+                        className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
+                      >
+                        Jenis Transaksi
+                      </th>
+                      <th
+                        scope="col"
+                        className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
+                      >
+                        Detail
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {currentItems?.map((produk, i) => (
+                      <tr
+                        key={i}
+                        className="transition-all hover:bg-gray-100 hover:shadow-lg"
+                      >
+                        <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {produk.receiptID}
+                        </td>
+                        <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {produk.karyawan.nama}
+                        </td>
+                        <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {produk.produk.namaproduk}
+                        </td>
+                        <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {produk.jumlah}
+                        </td>
+                        <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {produk.kode_produksi}
+                        </td>
+                        <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {produk.tanggal_expired}
+                        </td>
+                        <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {produk.tanggal_transaksi}
+                        </td>
+                        <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {produk.jenis_transaksi}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

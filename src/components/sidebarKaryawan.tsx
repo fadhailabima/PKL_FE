@@ -99,7 +99,7 @@ export default function SidebarKaryawan() {
             "
             className="flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100"
           >
-            <Icon icon="lucide:folder-plus" width="24" height="24" />
+            <Icon icon="lucide:folder-output" width="24" height="24" />
             <span className="font-semibold text-xl flex">Transaksi Keluar</span>
           </Link>
           <div className="flex flex-col space-y-9 w-full">

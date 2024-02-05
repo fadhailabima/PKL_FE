@@ -66,7 +66,7 @@ export default function editProfile() {
 
       setTimeout(() => {
         // Pindahkan router.push ke dalam setTimeout
-        router.push("/profile-karyawan");
+        router.push("/profile");
       }, 1000);
     } catch (error: any) {
       console.error(
