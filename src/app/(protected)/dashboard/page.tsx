@@ -17,7 +17,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import autoTable from "jspdf-autotable";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -44,33 +44,300 @@ export default function Dashboard() {
     }
   }, []);
 
-  const generatePDFRekap = () => {
-    const input = document.getElementById("rekapTransaksi"); // id of the element to be converted to PDF
-    if (input) {
-      html2canvas(input)
-        .then((canvas) => {
-          const imgData = canvas.toDataURL("image/png");
-          const pdf = new jsPDF("p", "pt", [canvas.width, canvas.height]);
-          console.log(imgData);
-          pdf.addImage(
-            imgData,
-            "PNG",
-            0,
-            0,
-            canvas.width * 0.75, // convert pixels to points
-            canvas.height * 0.75 // convert pixels to points
-          );
-          pdf.save("download.pdf");
-        })
-        .catch((error) => {
-          console.error("Error rendering canvas:", error);
-        });
-    } else {
-      console.error("Element with id 'rekaptransaksi' not found");
-    }
+  const handlePrintRekapFull = () => {
+    const doc = new jsPDF();
+
+    autoTable(doc, {
+      body: [
+        [
+          {
+            content: "Saprotan Utama Nusantara",
+            styles: {
+              halign: "left",
+              fontSize: 15,
+              textColor: [0, 128, 0],
+            },
+          },
+          {
+            content: "Rekap Transaksi",
+            styles: {
+              halign: "right",
+              fontSize: 15,
+            },
+          },
+        ],
+      ],
+      theme: "plain",
+    });
+
+    autoTable(doc, {
+      body: [
+        [
+          {
+            content:
+              "Tanggal Cetak : " +
+              new Date().getDate().toString().padStart(2, "0") +
+              " " +
+              [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+              ][new Date().getMonth()] +
+              " " +
+              new Date().getFullYear() +
+              " " +
+              new Date().getHours().toString().padStart(2, "0") +
+              ":" +
+              new Date().getMinutes().toString().padStart(2, "0") +
+              ":" +
+              new Date().getSeconds().toString().padStart(2, "0"),
+            styles: {
+              halign: "left",
+            },
+          },
+        ],
+      ],
+      theme: "plain",
+      // styles: {
+      //   fillColor: "#fffff",
+      // },
+    });
+
+    autoTable(doc, {
+      head: [
+        [
+          "ID Transaksi",
+          "Nama Petugas",
+          "Nama Produk",
+          "Jumlah",
+          "Kode Produksi",
+          "Tanggal Expired",
+          "Tanggal Transaksi",
+          "Jenis Transaksi",
+        ],
+      ],
+      body:
+        currentItems?.map((produk) => [
+          produk.receiptID,
+          produk.karyawan.nama,
+          produk.produk.namaproduk,
+          produk.jumlah,
+          produk.kode_produksi,
+          produk.tanggal_expired,
+          produk.tanggal_transaksi,
+          produk.jenis_transaksi,
+        ]) || [],
+      theme: "striped",
+    });
+
+    // Save the PDF
+    doc.save("RekapTransaksi.pdf");
   };
 
-  // console.log(imgData);
+  const handlePrintRekapMasuk = () => {
+    const doc = new jsPDF();
+
+    autoTable(doc, {
+      body: [
+        [
+          {
+            content: "Saprotan Utama Nusantara",
+            styles: {
+              halign: "left",
+              fontSize: 15,
+              // textColor: "#ffffff",
+            },
+          },
+          {
+            content: "Rekap Transaksi Masuk",
+            styles: {
+              halign: "right",
+              fontSize: 15,
+              // textColor: "#ffffff",
+            },
+          },
+        ],
+      ],
+      theme: "plain",
+    });
+
+    autoTable(doc, {
+      body: [
+        [
+          {
+            content:
+              "Tanggal Cetak : " +
+              new Date().getDate().toString().padStart(2, "0") +
+              " " +
+              [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+              ][new Date().getMonth()] +
+              " " +
+              new Date().getFullYear() +
+              " " +
+              new Date().getHours().toString().padStart(2, "0") +
+              ":" +
+              new Date().getMinutes().toString().padStart(2, "0") +
+              ":" +
+              new Date().getSeconds().toString().padStart(2, "0"),
+            styles: {
+              halign: "left",
+              // fontSize: 10,
+              // textColor: "#0000",
+            },
+          },
+        ],
+      ],
+      theme: "plain",
+    });
+
+    autoTable(doc, {
+      head: [
+        [
+          "ID Transaksi",
+          "Nama Petugas",
+          "Nama Produk",
+          "Jumlah",
+          "Kode Produksi",
+          "Tanggal Expired",
+          "Tanggal Transaksi",
+          "Jenis Transaksi",
+        ],
+      ],
+      body:
+        currentItems
+          ?.filter((produk) => produk.jenis_transaksi === "masuk")
+          .map((produk) => [
+            produk.receiptID,
+            produk.karyawan.nama,
+            produk.produk.namaproduk,
+            produk.jumlah,
+            produk.kode_produksi,
+            produk.tanggal_expired,
+            produk.tanggal_transaksi,
+            produk.jenis_transaksi,
+          ]) || [],
+    });
+
+    // Save the PDF
+    doc.save("RekapTransaksiMasuk.pdf");
+  };
+
+  const handlePrintRekapKeluar = () => {
+    const doc = new jsPDF();
+
+    autoTable(doc, {
+      body: [
+        [
+          {
+            content: "Saprotan Utama Nusantara",
+            styles: {
+              halign: "left",
+              fontSize: 15,
+            },
+          },
+          {
+            content: "Rekap Transaksi Keluar",
+            styles: {
+              halign: "right",
+              fontSize: 15,
+            },
+          },
+        ],
+      ],
+      theme: "plain",
+    });
+
+    autoTable(doc, {
+      body: [
+        [
+          {
+            content:
+              "Tanggal Cetak : " +
+              new Date().getDate().toString().padStart(2, "0") +
+              " " +
+              [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+              ][new Date().getMonth()] +
+              " " +
+              new Date().getFullYear() +
+              " " +
+              new Date().getHours().toString().padStart(2, "0") +
+              ":" +
+              new Date().getMinutes().toString().padStart(2, "0") +
+              ":" +
+              new Date().getSeconds().toString().padStart(2, "0"),
+            styles: {
+              halign: "left",
+            },
+          },
+        ],
+      ],
+      theme: "plain",
+    });
+
+    autoTable(doc, {
+      head: [
+        [
+          "ID Transaksi",
+          "Nama Petugas",
+          "Nama Produk",
+          "Jumlah",
+          "Kode Produksi",
+          "Tanggal Expired",
+          "Tanggal Transaksi",
+          "Jenis Transaksi",
+        ],
+      ],
+      body:
+        currentItems
+          ?.filter((produk) => produk.jenis_transaksi === "masuk")
+          .map((produk) => [
+            produk.receiptID,
+            produk.karyawan.nama,
+            produk.produk.namaproduk,
+            produk.jumlah,
+            produk.kode_produksi,
+            produk.tanggal_expired,
+            produk.tanggal_transaksi,
+            produk.jenis_transaksi,
+          ]) || [],
+    });
+
+    // Save the PDF
+    doc.save("RekapTransaksiKeluar.pdf");
+  };
 
   const [transaksi, saveData] = useState<Transaksi[] | null>(null);
   const ambilData = async (token: string) => {
@@ -188,17 +455,23 @@ export default function Dashboard() {
             Select transaction type
           </option>
           <option value="">All</option>
-          <option value="masuk">Masuk</option>
-          <option value="keluar">Keluar</option>
+          <option value="Masuk">Masuk</option>
+          <option value="Keluar">Keluar</option>
         </select>
         {filterTerm === "" && (
-          <Button onClick={generatePDFRekap}>Download Rekap Transaksi </Button>
+          <Button onClick={handlePrintRekapFull}>
+            Download Rekap Transaksi{" "}
+          </Button>
         )}
-        {filterTerm === "masuk" && (
-          <Button onClick={generatePDFRekap}>Download Rekap Transaksi Masuk</Button>
+        {filterTerm === "Masuk" && (
+          <Button onClick={handlePrintRekapMasuk}>
+            Download Rekap Transaksi Masuk
+          </Button>
         )}
-        {filterTerm === "keluar" && (
-          <Button onClick={generatePDFRekap}>Download Rekap Transaksi Keluar</Button>
+        {filterTerm === "Keluar" && (
+          <Button onClick={handlePrintRekapKeluar}>
+            Download Rekap Transaksi Keluar
+          </Button>
         )}
       </div>
       <div className="flex flex-col mt-6">
@@ -352,114 +625,6 @@ export default function Dashboard() {
                 >
                   Next
                 </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        className="flex flex-col mt-6"
-        style={{ display: "none" }}
-        id="rekapTransaksi"
-      >
-        <h3 className="mt-6 text-xl">Rekap Transaksi</h3>
-        <div className="flex flex-col mt-6">
-          <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-              <div className="overflow-hidden border-b border-gray-200 rounded-md shadow-md">
-                <table className="min-w-full overflow-x-scroll divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
-                      >
-                        ID Transaksi
-                      </th>
-                      <th
-                        scope="col"
-                        className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
-                      >
-                        Nama Petugas
-                      </th>
-                      <th
-                        scope="col"
-                        className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
-                      >
-                        Nama Produk
-                      </th>
-                      <th
-                        scope="col"
-                        className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
-                      >
-                        Jumlah
-                      </th>
-                      <th
-                        scope="col"
-                        className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
-                      >
-                        Kode Produksi
-                      </th>
-                      <th
-                        scope="col"
-                        className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
-                      >
-                        Tanggal Expired
-                      </th>
-                      <th
-                        scope="col"
-                        className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
-                      >
-                        Tanggal Transaksi
-                      </th>
-                      <th
-                        scope="col"
-                        className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
-                      >
-                        Jenis Transaksi
-                      </th>
-                      <th
-                        scope="col"
-                        className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
-                      >
-                        Detail
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {currentItems?.map((produk, i) => (
-                      <tr
-                        key={i}
-                        className="transition-all hover:bg-gray-100 hover:shadow-lg"
-                      >
-                        <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {produk.receiptID}
-                        </td>
-                        <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {produk.karyawan.nama}
-                        </td>
-                        <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {produk.produk.namaproduk}
-                        </td>
-                        <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {produk.jumlah}
-                        </td>
-                        <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {produk.kode_produksi}
-                        </td>
-                        <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {produk.tanggal_expired}
-                        </td>
-                        <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {produk.tanggal_transaksi}
-                        </td>
-                        <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {produk.jenis_transaksi}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
               </div>
             </div>
           </div>

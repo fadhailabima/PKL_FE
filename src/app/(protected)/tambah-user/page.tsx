@@ -91,8 +91,10 @@ export default function Profile() {
           </label>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button className="w-56 mt-2 mb-2 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans">
-                Select Level
+              <Button
+                className={`w-56 mt-2 mb-2 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans ${level}`}
+              >
+                {level || "Select Level"}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">

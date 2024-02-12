@@ -11,11 +11,21 @@ export const login = async (username, password) => {
 
     if (response.data.message === "Login Berhasil") {
       return response.data.data.user;
-    } else {
+    } else if (
+      response.data.message === "Kombinasi username dan password tidak valid."
+    ) {
       throw new Error("Kombinasi username dan password tidak valid.");
+    } else if (response.data.message === "Akun tidak aktif.") {
+      throw new Error("Akun tidak aktif.");
+    } else {
+      throw new Error("Terjadi kesalahan dalam proses login");
     }
   } catch (error) {
-    throw new Error(`Terjadi kesalahan dalam proses login`);
+    if (error.response && error.response.status === 401) {
+      throw new Error("Kombinasi username dan password tidak valid.");
+    } else {
+      throw error;
+    }
   }
 };
 

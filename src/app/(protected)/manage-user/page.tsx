@@ -207,7 +207,7 @@ export default function manageUser() {
                               onClick={() => {
                                 const newStatus =
                                   item.admin.status === "Aktif"
-                                    ? "NON AKTIF"
+                                    ? "Non Aktif"
                                     : "Aktif";
                                 handleChangeStatus(item.id, newStatus);
                               }}
@@ -255,7 +255,7 @@ export default function manageUser() {
                               onClick={() => {
                                 const newStatus =
                                   item.karyawan.status === "Aktif"
-                                    ? "NON AKTIF"
+                                    ? "Non Aktif"
                                     : "Aktif";
                                 setStatus(newStatus); // toggle status first
                                 handleChangeStatus(item.id, newStatus);

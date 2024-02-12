@@ -108,7 +108,7 @@ export default function TambahProduk() {
               <Button
                 className={`w-56 mt-2 mb-2 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans ${jenisproduk}`}
               >
-                {jenisproduk || "Select a product"}
+                {jenisproduk || "Select a product's type"}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">

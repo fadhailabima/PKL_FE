@@ -12,7 +12,7 @@ export default function manageRak() {
   const [filterTerm, setFilterTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
-    const [status, setStatus] = useState<string>("tersedia"); 
+  const [status, setStatus] = useState<string>("Tersedia");
   const [data, setData] = useState<Rak[] | null>(null);
 
   const getData = async (token: string) => {
@@ -82,8 +82,8 @@ export default function manageRak() {
             Select Status
           </option>
           <option value="">All</option>
-          <option value="tersedia">Tersedia</option>
-          <option value="tidak tersedia">Tidak Tersedia</option>
+          <option value="Tersedia">Tersedia</option>
+          <option value="Tidak Tersedia">Tidak Tersedia</option>
         </select>
         <div>
           <Link href="/tambah-rak">
@@ -131,9 +131,9 @@ export default function manageRak() {
                         <Button
                           onClick={() => {
                             const newStatus =
-                              item.status === "tersedia"
-                                ? "tidak tersedia"
-                                : "tersedia";
+                              item.status === "Tersedia"
+                                ? "Tidak Tersedia"
+                                : "Tersedia";
                             handleChangeStatus(item.idrak, newStatus);
                           }}
                         >
@@ -141,7 +141,7 @@ export default function manageRak() {
                         </Button>
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {item.status === "tidak tersedia" ? (
+                        {item.status === "Tidak Tersedia" ? (
                           <Button variant="link" disabled>
                             Detail
                           </Button>

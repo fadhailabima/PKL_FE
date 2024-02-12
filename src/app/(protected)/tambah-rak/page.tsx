@@ -32,6 +32,10 @@ export default function tambahRak() {
     }
 
     setShowSuccessAlert(true);
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   };
   return (
     <div className="h-250 py-2 flex justify-center items-center">
@@ -82,9 +86,7 @@ export default function tambahRak() {
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>Berhasil Menambahkan Rak</AlertTitle>
-              <AlertDescription>
-                Rak berhasil ditambahkan
-              </AlertDescription>
+              <AlertDescription>Rak berhasil ditambahkan</AlertDescription>
             </Alert>
           )}
         </form>

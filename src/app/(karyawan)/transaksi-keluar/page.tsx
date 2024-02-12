@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import {
-  Transaksi,
   getTransaksiReport,
   transaksiKeluar,
+  TransactionData,
 } from "@/services/transaksi";
 import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -20,6 +20,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import React, { useState, useEffect } from "react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 export default function tambahRak() {
   const [nama_produk, setProduk] = useState(""); // assuming it's a number
@@ -27,9 +29,11 @@ export default function tambahRak() {
   const [error, setError] = useState(null);
   const router = useRouter();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  const [transaksi, setTransaksi] = useState<{namaproduk: string}[] | null>(
+  const [transaksi, setTransaksi] = useState<{ namaproduk: string }[] | null>(
     null
   );
+  const [transactionData, setTransactionData] =
+    useState<TransactionData | null>(null);
 
   const getTransaksi = async (token: string) => {
     const res = await getTransaksiReport(token);
@@ -52,9 +56,13 @@ export default function tambahRak() {
       if (!token) {
         throw new Error("No token found");
       }
-      const res = await transaksiKeluar(token, nama_produk, jumlah);
-      if (res) {
+      const response = await transaksiKeluar(token, nama_produk, jumlah);
+      if (response) {
         console.log("Successfully added Transaksi");
+        setTransactionData(response.data); // Simpan data transaksi ke dalam state
+
+        console.log(response.data);
+        printTransaksiKeluar(response.data as TransactionData);
         router.push("/transaksi-keluar");
       }
     } catch (error: any) {
@@ -64,10 +72,133 @@ export default function tambahRak() {
     setShowSuccessAlert(true);
     setTimeout(() => {
       window.location.reload();
-    }, 500);
+    }, 1000);
   };
 
-  console.log("transaksi", transaksi);
+  const printTransaksiKeluar = (transactionData: TransactionData | null) => {
+    const doc = new jsPDF();
+
+    autoTable(doc, {
+      body: [
+        [
+          {
+            content: "Saprotan Utama Nusantara",
+            styles: {
+              halign: "left",
+              fontSize: 15,
+              textColor: [0, 128, 0],
+            },
+          },
+          {
+            content: "Transaksi Keluar",
+            styles: {
+              halign: "right",
+              fontSize: 15,
+            },
+          },
+        ],
+      ],
+      theme: "plain",
+    });
+
+    autoTable(doc, {
+      body: [
+        [
+          {
+            content:
+              "Tanggal Cetak : " +
+              new Date().getDate().toString().padStart(2, "0") +
+              " " +
+              [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+              ][new Date().getMonth()] +
+              " " +
+              new Date().getFullYear() +
+              " " +
+              new Date().getHours().toString().padStart(2, "0") +
+              ":" +
+              new Date().getMinutes().toString().padStart(2, "0") +
+              ":" +
+              new Date().getSeconds().toString().padStart(2, "0"),
+            styles: {
+              halign: "left",
+            },
+          },
+        ],
+      ],
+      theme: "plain",
+    });
+    autoTable(doc, {
+      body: [
+        [
+          {
+            content:
+              "ID Transaksi: " +
+              transactionData?.transaction.receiptID +
+              "\nKode Produksi: " +
+              transactionData?.transaction.kode_produksi +
+              "\nNama Produk: " +
+              transactionData?.transaction.produk.namaproduk +
+              "\nNama Petugas: " +
+              transactionData?.transaction.karyawan.nama +
+              "\nJumlah: " +
+              transactionData?.transaction.jumlah +
+              "\nTanggal Transaksi: " +
+              transactionData?.transaction.tanggal_transaksi +
+              "\nTanggal Expired: " +
+              transactionData?.transaction.tanggal_expired,
+            styles: {
+              halign: "left",
+            },
+          },
+        ],
+      ],
+      theme: "plain",
+    });
+
+    autoTable(doc, {
+      body: [
+        [
+          {
+            content: "Laporan Transaksi",
+            styles: {
+              halign: "left",
+              fontSize: 14,
+            },
+          },
+        ],
+      ],
+      theme: "plain",
+    });
+
+    autoTable(doc, {
+      head: [["Lokasi Rak", "Rak Slot", "Jumlah"]],
+      body: transactionData?.transaction.transaksi_reports
+        ? transactionData.transaction.transaksi_reports.map((report) => [
+            report.id_rak,
+            report.id_rakslot,
+            report.jumlah || [],
+          ])
+        : [],
+      theme: "striped",
+      headStyles: {
+        fillColor: "#343a40",
+      },
+    });
+
+    doc.save("LaporanTransaksiKeluar.pdf");
+  };
 
   return (
     <div className="h-250 py-2 flex justify-center items-center">

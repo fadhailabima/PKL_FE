@@ -3,7 +3,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
-import { transaksiMasuk } from "@/services/transaksi";
+import { transaksiMasuk, TransactionData } from "@/services/transaksi";
 import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
@@ -26,6 +26,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import React, { useState, useEffect } from "react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 export default function tambahRak() {
   const [nama_produk, setProduk] = useState(""); // assuming it's a number
@@ -34,8 +36,9 @@ export default function tambahRak() {
   const [kode_produksi, setKode] = useState(""); // assuming it's a string
   const [error, setError] = useState(null);
   const router = useRouter();
-  const [value, setValue] = useState("");
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [transactionData, setTransactionData] =
+    useState<TransactionData | null>(null);
   const [data, setData] = useState<Produk[] | null>(null);
 
   const getData = async (token: string) => {
@@ -59,15 +62,19 @@ export default function tambahRak() {
       if (!token) {
         throw new Error("No token found");
       }
-      const res = await transaksiMasuk(
+      const response = await transaksiMasuk(
         token,
         nama_produk,
         jumlah,
         format(tanggal_expired as Date, "yyyy-MM-dd"),
         kode_produksi
       );
-      if (res) {
+      if (response) {
         console.log("Successfully added Transaksi");
+        setTransactionData(response.data); // Simpan data transaksi ke dalam state
+
+        console.log(response.data);
+        printTransaksiMasuk(response.data as TransactionData);
         router.push("/transaksi-masuk");
       }
     } catch (error: any) {
@@ -77,7 +84,132 @@ export default function tambahRak() {
     setShowSuccessAlert(true);
     setTimeout(() => {
       window.location.reload();
-    }, 500);
+    }, 1000);
+  };
+
+  const printTransaksiMasuk = (transactionData: TransactionData | null) => {
+    const doc = new jsPDF();
+
+    autoTable(doc, {
+      body: [
+        [
+          {
+            content: "Saprotan Utama Nusantara",
+            styles: {
+              halign: "left",
+              fontSize: 15,
+              textColor: [0, 128, 0],
+            },
+          },
+          {
+            content: "Transaksi Masuk",
+            styles: {
+              halign: "right",
+              fontSize: 15,
+            },
+          },
+        ],
+      ],
+      theme: "plain",
+    });
+
+    autoTable(doc, {
+      body: [
+        [
+          {
+            content:
+              "Tanggal Cetak : " +
+              new Date().getDate().toString().padStart(2, "0") +
+              " " +
+              [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+              ][new Date().getMonth()] +
+              " " +
+              new Date().getFullYear() +
+              " " +
+              new Date().getHours().toString().padStart(2, "0") +
+              ":" +
+              new Date().getMinutes().toString().padStart(2, "0") +
+              ":" +
+              new Date().getSeconds().toString().padStart(2, "0"),
+            styles: {
+              halign: "left",
+            },
+          },
+        ],
+      ],
+      theme: "plain",
+    });
+    autoTable(doc, {
+      body: [
+        [
+          {
+            content:
+              "ID Transaksi: " +
+              transactionData?.transaction.receiptID +
+              "\nKode Produksi: " +
+              transactionData?.transaction.kode_produksi +
+              "\nNama Produk: " +
+              transactionData?.transaction.produk.namaproduk +
+              "\nNama Petugas: " +
+              transactionData?.transaction.karyawan.nama +
+              "\nJumlah: " +
+              transactionData?.transaction.jumlah +
+              "\nTanggal Transaksi: " +
+              transactionData?.transaction.tanggal_transaksi +
+              "\nTanggal Expired: " +
+              transactionData?.transaction.tanggal_expired,
+            styles: {
+              halign: "left",
+            },
+          },
+        ],
+      ],
+      theme: "plain",
+    });
+
+    autoTable(doc, {
+      body: [
+        [
+          {
+            content: "Laporan Transaksi",
+            styles: {
+              halign: "left",
+              fontSize: 14,
+            },
+          },
+        ],
+      ],
+      theme: "plain",
+    });
+
+    autoTable(doc, {
+      head: [["Lokasi Rak", "Rak Slot", "Jumlah"]],
+      body: transactionData?.transaction.transaksi_reports
+        ? transactionData.transaction.transaksi_reports.map((report) => [
+            report.id_rak,
+            report.id_rakslot,
+            report.jumlah || [],
+          ])
+        : [],
+      theme: "striped",
+      headStyles: {
+        fillColor: "#343a40",
+      },
+    });
+
+    doc.save("LaporanTransaksiMasuk.pdf");
   };
   return (
     <div className="h-250 py-2 flex justify-center items-center">
@@ -130,7 +262,7 @@ export default function tambahRak() {
             </label>
             <Input
               onChange={(e) => setJumlah(e.target.value)}
-              placeholder="Enter Status"
+              placeholder="Enter Value"
             />
           </div>
           <div>
@@ -139,7 +271,7 @@ export default function tambahRak() {
             </label>
             <Input
               onChange={(e) => setKode(e.target.value)}
-              placeholder="Enter Status"
+              placeholder="Enter Production Code"
             />
           </div>
           <div>
@@ -182,7 +314,7 @@ export default function tambahRak() {
           {error && (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Gagal Tambah Rak</AlertTitle>
+              <AlertTitle>Gagal Tambah Transaksi</AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}

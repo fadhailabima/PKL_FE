@@ -67,9 +67,11 @@ export default function manageProduk() {
 
   const filteredItems = data?.filter(
     (item) =>
-      ((item.namaproduk?.toLowerCase().includes(searchTermLower) ||
+      (item.namaproduk?.toLowerCase().includes(searchTermLower) ||
         item.idproduk?.includes(searchTermLower)) &&
-        (!item.jenis_produk || filterTermLower === "" || item.jenis_produk.jenisproduk === filterTermLower))
+      (!item.jenis_produk ||
+        filterTermLower === "" ||
+        item.jenis_produk.jenisproduk === filterTermLower)
   );
   const totalPages = Math.ceil((filteredItems?.length ?? 0) / itemsPerPage);
   const currentItems = filteredItems?.slice(
@@ -189,21 +191,6 @@ export default function manageProduk() {
                   ))}
                 </tbody>
               </table>
-              {/* {error && (
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4 mt-5" />
-                  <AlertTitle>Gagal hapus produk</AlertTitle>
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
-              {showSuccessAlert && (
-                <Alert>
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Berhasil hapus produk</AlertTitle>
-                  <AlertDescription>Produk berhasil dihapus</AlertDescription>
-                </Alert>
-              )} */}
-
               <div className="flex justify-between items-center mt-2">
                 <Button
                   className="m-2"

@@ -83,8 +83,8 @@ export default function Dashboard() {
             Select transaction type
           </option>
           <option value="">All</option>
-          <option value="masuk">Masuk</option>
-          <option value="keluar">Keluar</option>
+          <option value="Masuk">Masuk</option>
+          <option value="Keluar">Keluar</option>
         </select>
       </div>
       <div className="flex flex-col mt-6">

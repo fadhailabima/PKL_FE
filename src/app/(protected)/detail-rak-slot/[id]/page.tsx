@@ -67,8 +67,8 @@ export default function DetailRakSlot({
             Select Status
           </option>
           <option value="">All</option>
-          <option value="tersedia">Tersedia</option>
-          <option value="tidak tersedia">Tidak Tersedia</option>
+          <option value="Tersedia">Tersedia</option>
+          <option value="Tidak Tersedia">Tidak Tersedia</option>
         </select>
         <div></div>
         <div>

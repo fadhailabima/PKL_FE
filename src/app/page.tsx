@@ -1,11 +1,7 @@
 "use client";
-
-import Image from "next/image";
-import { FaLock, FaUser } from "react-icons/fa";
 import { login } from "../services/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { type } from "os";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AlertCircle } from "lucide-react";
@@ -33,11 +29,11 @@ export default function Home() {
           router.push("/dashboard-karyawan");
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      setError(error.message); // Set the error message to the error state
     }
   };
-
   return (
     <div className="flex flex-wrap min-h-screen w-full content-center justify-center bg-gray-200 py-10">
       <div className="flex shadow-md">

@@ -143,7 +143,7 @@ export default function manageProduk() {
                           <AlertDialogContent>
                             <AlertDialogHeader>
                               <AlertDialogTitle>
-                                Apakah anda yakin ingin menghapus produk ?
+                                Apakah anda yakin ingin menghapus jenis produk ?
                               </AlertDialogTitle>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
