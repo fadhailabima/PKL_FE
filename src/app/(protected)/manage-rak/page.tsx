@@ -136,6 +136,7 @@ export default function manageRak() {
                                 : "Tersedia";
                             handleChangeStatus(item.idrak, newStatus);
                           }}
+                          className={item.status === "Tersedia" ? "bg-green-600" : "bg-red-600"}
                         >
                           {item.status}
                         </Button>

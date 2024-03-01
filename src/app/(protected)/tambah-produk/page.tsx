@@ -12,7 +12,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { addProduk, Produk, getProduk, jenisProduk, getJenisProduk } from "@/services/produk";
+import {
+  addProduk,
+  Produk,
+  getProduk,
+  jenisProduk,
+  getJenisProduk,
+} from "@/services/produk";
 import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
@@ -87,7 +93,7 @@ export default function TambahProduk() {
             </h2>
             <div>
               <Link href="/manage-produk">
-                <Button className="mt-6">Back</Button>
+                <Button className="mt-6">Kembali</Button>
               </Link>
             </div>
           </div>
@@ -97,7 +103,7 @@ export default function TambahProduk() {
             </label>
             <Input
               onChange={(e) => setNamaproduk(e.target.value)}
-              placeholder="Enter your product's name"
+              placeholder="Masukkan Nama Produk"
             />
           </div>
           <label className="text-gray-800 font-semibold block my-3 text-md">
@@ -106,9 +112,10 @@ export default function TambahProduk() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
-                className={`w-56 mt-2 mb-2 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans ${jenisproduk}`}
+                variant={"outline"}
+                className={`w-56 mt-2 mb-2 rounded-lg px-4 py-2 text-lg tracking-wide font-semibold font-sans ${jenisproduk}`}
               >
-                {jenisproduk || "Select a product's type"}
+                {jenisproduk || "Pilih Jenis Produk"}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
@@ -128,11 +135,11 @@ export default function TambahProduk() {
           </DropdownMenu>
           <div>
             <label className="text-gray-800 font-semibold block my-3 text-md">
-              Value
+              Volume Produk
             </label>
             <Input
               onChange={(e) => setValue(e.target.value)}
-              placeholder="Enter your product's value"
+              placeholder="Masukkan Volume Produk"
             />
           </div>
           <Button

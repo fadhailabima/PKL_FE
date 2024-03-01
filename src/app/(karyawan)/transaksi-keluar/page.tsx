@@ -220,10 +220,10 @@ export default function tambahRak() {
             </label>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  className={`w-56 mt-2 mb-2 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans ${nama_produk}`}
+                <Button variant={"outline"}
+                  className={`w-56 mt-2 mb-2 rounded-lg px-4 py-2 text-lg tracking-wide font-semibold font-sans ${nama_produk}`}
                 >
-                  {nama_produk || "Select a product"}
+                  {nama_produk || "Pilih Produk"}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">

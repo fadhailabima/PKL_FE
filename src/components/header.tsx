@@ -24,7 +24,7 @@ const Header = () => {
     >
       <div className="flex h-[55px] items-center justify-center px-4">
         <div className="hidden md:block">
-          <span className="font-semibold text-sm">
+          <span className="font-semibold text-sm text-green-600">
             PT. SAPROTAN UTAMA NUSANTARA
           </span>
         </div>

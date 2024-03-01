@@ -211,6 +211,11 @@ export default function manageUser() {
                                     : "Aktif";
                                 handleChangeStatus(item.id, newStatus);
                               }}
+                              className={
+                                item.admin.status === "Aktif"
+                                  ? "bg-green-600"
+                                  : "bg-red-600"
+                              }
                             >
                               {item.admin.status}
                             </Button>
@@ -257,9 +262,13 @@ export default function manageUser() {
                                   item.karyawan.status === "Aktif"
                                     ? "Non Aktif"
                                     : "Aktif";
-                                setStatus(newStatus); // toggle status first
                                 handleChangeStatus(item.id, newStatus);
                               }}
+                              className={
+                                item.karyawan.status === "Aktif"
+                                  ? "bg-green-600"
+                                  : "bg-red-600"
+                              }
                             >
                               {item.karyawan.status}
                             </Button>

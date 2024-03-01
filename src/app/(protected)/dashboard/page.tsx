@@ -154,7 +154,7 @@ export default function Dashboard() {
             styles: {
               halign: "left",
               fontSize: 15,
-              // textColor: "#ffffff",
+              textColor: [0, 128, 0],
             },
           },
           {
@@ -226,7 +226,7 @@ export default function Dashboard() {
       ],
       body:
         currentItems
-          ?.filter((produk) => produk.jenis_transaksi === "masuk")
+          ?.filter((produk) => produk.jenis_transaksi === "Masuk")
           .map((produk) => [
             produk.receiptID,
             produk.karyawan.nama,
@@ -254,6 +254,7 @@ export default function Dashboard() {
             styles: {
               halign: "left",
               fontSize: 15,
+              textColor: [0, 128, 0],
             },
           },
           {
@@ -322,7 +323,7 @@ export default function Dashboard() {
       ],
       body:
         currentItems
-          ?.filter((produk) => produk.jenis_transaksi === "masuk")
+          ?.filter((produk) => produk.jenis_transaksi === "Keluar")
           .map((produk) => [
             produk.receiptID,
             produk.karyawan.nama,

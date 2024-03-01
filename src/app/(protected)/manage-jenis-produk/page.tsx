@@ -107,7 +107,7 @@ export default function manageProduk() {
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      ID
+                      No
                     </th>
                     <th
                       scope="col"
@@ -130,7 +130,7 @@ export default function manageProduk() {
                       className="transition-all hover:bg-gray-100 hover:shadow-lg"
                     >
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {item.id}
+                        {i + 1}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {item.jenisproduk}

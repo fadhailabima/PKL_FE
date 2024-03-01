@@ -231,10 +231,10 @@ export default function tambahRak() {
             </label>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  className={`w-56 mt-2 mb-2 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans ${nama_produk}`}
+                <Button variant={"outline"}
+                  className={`w-56 mt-2 mb-2 rounded-lg px-4 py-2 text-lg tracking-wide font-semibold font-sans ${nama_produk}`}
                 >
-                  {nama_produk || "Select a product"}
+                  {nama_produk || "Pilih Produk"}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
@@ -262,7 +262,7 @@ export default function tambahRak() {
             </label>
             <Input
               onChange={(e) => setJumlah(e.target.value)}
-              placeholder="Enter Value"
+              placeholder="Masukkan Jumlah"
             />
           </div>
           <div>
@@ -271,7 +271,7 @@ export default function tambahRak() {
             </label>
             <Input
               onChange={(e) => setKode(e.target.value)}
-              placeholder="Enter Production Code"
+              placeholder="Masukkan Kode Produksi"
             />
           </div>
           <div>
@@ -291,7 +291,7 @@ export default function tambahRak() {
                   {tanggal_expired ? (
                     format(tanggal_expired, "PPP")
                   ) : (
-                    <span>Pick a date</span>
+                    <span>Pilih Tanggal</span>
                   )}
                 </Button>
               </PopoverTrigger>

@@ -10,7 +10,6 @@ import React, { useState } from "react";
 
 export default function tambahRak() {
   const [kapasitas_maksimal, setKapasitas] = useState(""); // assuming it's a number
-  const [status, setStatus] = useState(""); // assuming it's a string
   const [error, setError] = useState(null);
   const router = useRouter();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -22,7 +21,7 @@ export default function tambahRak() {
       if (!token) {
         throw new Error("No token found");
       }
-      const res = await addRak(token, kapasitas_maksimal, status);
+      const res = await addRak(token, kapasitas_maksimal);
       if (res) {
         console.log("Successfully added Rak");
         router.push("/tambah-rak");
@@ -60,16 +59,8 @@ export default function tambahRak() {
               placeholder="Enter Capacity"
             />
           </div>
-          <div>
-            <label className="text-gray-800 font-semibold block my-3 text-md">
-              Status
-            </label>
-            <Input
-              onChange={(e) => setStatus(e.target.value)}
-              placeholder="Enter Status"
-            />
-          </div>
           <Button
+            // asChild
             className="w-full mt-6 mb-3 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
             onClick={handleAddRak}
           >

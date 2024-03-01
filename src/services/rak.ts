@@ -53,14 +53,12 @@ export const showRakSlotByID = async (token: string, idrak: string) => {
 export const addRak = async (
   token: string,
   kapasitas_maksimal: string,
-  status: string
 ) => {
   try {
     const response = await axios.post(
       `http://localhost:8000/api/tambahRakdanSlot`,
       {
         kapasitas_maksimal,
-        status,
       },
       {
         headers: {

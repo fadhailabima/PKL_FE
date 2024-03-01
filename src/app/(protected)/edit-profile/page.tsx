@@ -136,7 +136,7 @@ export default function editProfile() {
             </label>
             <Input
               className="p-1"
-              placeholder={data?.alamat}
+              placeholder={data?.alamat || "Masukkan Alamat"}
               value={alamat}
               onChange={(e) => setAlamat(e.target.value)}
             />
@@ -147,7 +147,7 @@ export default function editProfile() {
             </label>
             <Input
               className="p-1"
-              placeholder={data?.email}
+              placeholder={data?.email || "Masukkan Email"}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -158,7 +158,7 @@ export default function editProfile() {
             </label>
             <Input
               className="p-1"
-              placeholder={data?.handphone}
+              placeholder={data?.handphone || "Masukkan Nomor Handphone"}
               value={handphone}
               onChange={(e) => setHandphone(e.target.value)}
             />

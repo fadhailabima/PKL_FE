@@ -74,7 +74,7 @@ export default function Profile() {
             </label>
             <Input
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter your username"
+              placeholder="Masukkan Username"
             />
           </div>
           <div>
@@ -83,7 +83,7 @@ export default function Profile() {
             </label>
             <Input
               onChange={(e) => setNama(e.target.value)}
-              placeholder="Enter your name"
+              placeholder="Masukkan Nama"
             />
           </div>
           <label className="text-gray-800 font-semibold block my-3 text-md">
@@ -91,10 +91,10 @@ export default function Profile() {
           </label>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                className={`w-56 mt-2 mb-2 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans ${level}`}
+              <Button variant={"outline"}
+                className={`w-56 mt-2 mb-2 rounded-lg px-4 py-2 text-lg tracking-wide font-semibold font-sans ${level}`}
               >
-                {level || "Select Level"}
+                {level || "Pilih Level"}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
@@ -116,7 +116,7 @@ export default function Profile() {
             </label>
             <Input
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
+              placeholder="Masukkan Password"
               type="password"
             />
           </div>
