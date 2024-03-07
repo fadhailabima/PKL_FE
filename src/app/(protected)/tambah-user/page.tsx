@@ -105,7 +105,7 @@ export default function Profile() {
                   Admin
                 </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="karyawan">
-                  Petugas
+                  Karyawan
                 </DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
