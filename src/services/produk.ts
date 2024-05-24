@@ -10,6 +10,7 @@ export type Produk = {
   namaproduk: string;
   idjenis_produk: number;
   jenis_produk: jenisProduk;
+  value: string;
 };
 
 export const getProduk = async (token: string): Promise<Produk[]> => {

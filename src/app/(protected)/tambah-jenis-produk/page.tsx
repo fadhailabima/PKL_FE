@@ -14,27 +14,25 @@ export default function TambahJenisProduk() {
   const router = useRouter();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
-  const handleAddJenisProduk = async (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    try {
-      const token = localStorage.getItem("token"); // get the token from local storage
-      if (!token) {
-        throw new Error("No token found");
-      }
-      const res = await addJenisProduk(token, jenisproduk);
-      if (res) {
-        console.log("Successfully added Product");
-        router.push("/tambah-jenis-produk");
-      }
-    } catch (error: any) {
-      setError(error.message);
+const handleAddJenisProduk = async (e: React.MouseEvent<HTMLElement>) => {
+  e.preventDefault();
+  try {
+    const token = localStorage.getItem("token"); // get the token from local storage
+    if (!token) {
+      throw new Error("No token found");
     }
-
-    setShowSuccessAlert(true);
-    setTimeout(() => {
-      window.location.reload();
-    }, 1500);
-  };
+    const res = await addJenisProduk(token, jenisproduk);
+    if (res) {
+      console.log("Successfully added Product");
+      setShowSuccessAlert(true);
+      setTimeout(() => {
+        router.push("/manage-jenis-produk"); // Change route to "/manage-jenis-produk"
+      }, 1500);
+    }
+  } catch (error: any) {
+    setError(error.message);
+  }
+};
   return (
     <div className="h-250 py-2 flex justify-center items-center">
       <div className="lg:w-2/5 md:w-1/2 w-2/3">

@@ -1,7 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Produk, getProduk, deleteProduk } from "@/services/produk";
+import {
+  Produk,
+  getProduk,
+  deleteProduk,
+  jenisProduk,
+  getJenisProduk,
+} from "@/services/produk";
 import Link from "next/link";
 import {
   AlertDialog,
@@ -32,7 +38,6 @@ export default function manageProduk() {
     const res = await getProduk(token);
     setData(res);
   };
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -59,7 +64,9 @@ export default function manageProduk() {
     setError(false);
     setTimeout(() => {
       getData(localStorage.getItem("token")!);
-    }, 100);
+      setShowSuccessAlert(false); // Set showSuccessAlert to false before redirecting
+      router.push("/manage-produk");
+    }, 1000);
   };
 
   const searchTermLower = searchTerm?.toLowerCase() || "";
@@ -103,11 +110,11 @@ export default function manageProduk() {
             Select Product Type
           </option>
           <option value="">All</option>
-          <option value="Pupuk Tunggal">Pupuk Tunggal</option>
-          <option value="Pupuk Majemuk">Pupuk Majemuk</option>
-          <option value="Pupuk Soluble">Pupuk Soluble</option>
-          <option value="Pupuk Organik">Pupuk Organik</option>
-          <option value="Pestisida">Pestisida</option>
+          {data?.map((item) => (
+            <option value={item.jenis_produk.jenisproduk}>
+              {item.jenis_produk.jenisproduk}
+            </option>
+          ))}
         </select>
         <div>
           <Link href="/tambah-produk">
@@ -144,6 +151,12 @@ export default function manageProduk() {
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
+                      Volume (Kg)
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
+                    >
                       Action
                     </th>
                   </tr>
@@ -162,6 +175,9 @@ export default function manageProduk() {
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {item.jenis_produk.jenisproduk}
+                      </td>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {item.value}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         <AlertDialog>

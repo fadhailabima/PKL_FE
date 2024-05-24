@@ -23,9 +23,9 @@ export default function Home() {
         localStorage.setItem("level", res.level);
 
         // Check the level of the user and route accordingly
-        if (res.level === "admin") {
+        if (res.level === "Admin") {
           router.push("/dashboard");
-        } else if (res.level === "karyawan") {
+        } else if (res.level === "Karyawan") {
           router.push("/dashboard-karyawan");
         }
       }

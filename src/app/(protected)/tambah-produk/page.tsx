@@ -62,27 +62,25 @@ export default function TambahProduk() {
     }
   }, []);
 
-  const handleAddProduk = async (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    try {
-      const token = localStorage.getItem("token"); // get the token from local storage
-      if (!token) {
-        throw new Error("No token found");
-      }
-      const res = await addProduk(token, namaproduk, jenisproduk, value);
-      if (res) {
-        console.log("Successfully added Product");
-        router.push("/tambah-produk");
-      }
-    } catch (error: any) {
-      setError(error.message);
+const handleAddProduk = async (e: React.MouseEvent<HTMLElement>) => {
+  e.preventDefault();
+  try {
+    const token = localStorage.getItem("token"); // get the token from local storage
+    if (!token) {
+      throw new Error("No token found");
     }
-
-    setShowSuccessAlert(true);
-    setTimeout(() => {
-      window.location.reload();
-    }, 1500);
-  };
+    const res = await addProduk(token, namaproduk, jenisproduk, value);
+    if (res) {
+      console.log("Successfully added Product");
+      setShowSuccessAlert(true);
+      setTimeout(() => {
+        router.push("/manage-produk"); // Change route to "/manage-produk"
+      }, 1500);
+    }
+  } catch (error: any) {
+    setError(error.message);
+  }
+};
   return (
     <div className="h-250 py-2 flex justify-center items-center">
       <div className="lg:w-2/5 md:w-1/2 w-2/3">
@@ -135,7 +133,7 @@ export default function TambahProduk() {
           </DropdownMenu>
           <div>
             <label className="text-gray-800 font-semibold block my-3 text-md">
-              Volume Produk
+              Volume Produk (Kg)
             </label>
             <Input
               onChange={(e) => setValue(e.target.value)}

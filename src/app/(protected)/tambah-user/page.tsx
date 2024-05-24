@@ -41,7 +41,6 @@ export default function Profile() {
         console.log("ini berhasil signup");
         localStorage.setItem("token", res);
         localStorage.setItem("user", JSON.stringify(res));
-        router.push("/tambah-user");
       }
     } catch (error: any) {
       setError(error.message);
@@ -51,7 +50,7 @@ export default function Profile() {
 
     // Reload the page after a short delay (adjust the delay if needed)
     setTimeout(() => {
-      window.location.reload();
+      router.push("/manage-user");
     }, 1000);
   };
   return (
@@ -91,7 +90,8 @@ export default function Profile() {
           </label>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant={"outline"}
+              <Button
+                variant={"outline"}
                 className={`w-56 mt-2 mb-2 rounded-lg px-4 py-2 text-lg tracking-wide font-semibold font-sans ${level}`}
               >
                 {level || "Pilih Level"}
@@ -101,10 +101,10 @@ export default function Profile() {
               <DropdownMenuLabel>Level User</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuRadioGroup value={level} onValueChange={setLevel}>
-                <DropdownMenuRadioItem value="admin">
+                <DropdownMenuRadioItem value="Admin">
                   Admin
                 </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="karyawan">
+                <DropdownMenuRadioItem value="Karyawan">
                   Karyawan
                 </DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>

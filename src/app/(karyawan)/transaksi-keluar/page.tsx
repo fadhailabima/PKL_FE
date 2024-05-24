@@ -29,9 +29,7 @@ export default function tambahRak() {
   const [error, setError] = useState(null);
   const router = useRouter();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  const [transaksi, setTransaksi] = useState<{ namaproduk: string }[] | null>(
-    null
-  );
+  const [transaksi, setTransaksi] = useState<{ produk: string }[] | null>(null);
   const [transactionData, setTransactionData] =
     useState<TransactionData | null>(null);
 
@@ -63,16 +61,14 @@ export default function tambahRak() {
 
         console.log(response.data);
         printTransaksiKeluar(response.data as TransactionData);
-        router.push("/transaksi-keluar");
+        setShowSuccessAlert(true);
+        setTimeout(() => {
+          router.push("/dashboard-karyawan"); // Change route to "/dashboard-karyawan"
+        }, 1500);
       }
     } catch (error: any) {
       setError(error.message);
     }
-
-    setShowSuccessAlert(true);
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
   };
 
   const printTransaksiKeluar = (transactionData: TransactionData | null) => {
@@ -146,8 +142,6 @@ export default function tambahRak() {
             content:
               "ID Transaksi: " +
               transactionData?.transaction.receiptID +
-              "\nKode Produksi: " +
-              transactionData?.transaction.kode_produksi +
               "\nNama Produk: " +
               transactionData?.transaction.produk.namaproduk +
               "\nNama Petugas: " +
@@ -155,9 +149,7 @@ export default function tambahRak() {
               "\nJumlah: " +
               transactionData?.transaction.jumlah +
               "\nTanggal Transaksi: " +
-              transactionData?.transaction.tanggal_transaksi +
-              "\nTanggal Expired: " +
-              transactionData?.transaction.tanggal_expired,
+              transactionData?.transaction.tanggal_transaksi,
             styles: {
               halign: "left",
             },
@@ -183,11 +175,13 @@ export default function tambahRak() {
     });
 
     autoTable(doc, {
-      head: [["Lokasi Rak", "Rak Slot", "Jumlah"]],
+      head: [["Lokasi Rak", "Rak Slot", "Tanggal Kadaluarsa", "Kode Produksi", "Jumlah"]],
       body: transactionData?.transaction.transaksi_reports
         ? transactionData.transaction.transaksi_reports.map((report) => [
             report.id_rak,
             report.id_rakslot,
+            report.expired_date,
+            report.kode_produksi,
             report.jumlah || [],
           ])
         : [],
@@ -220,7 +214,8 @@ export default function tambahRak() {
             </label>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant={"outline"}
+                <Button
+                  variant={"outline"}
                   className={`w-56 mt-2 mb-2 rounded-lg px-4 py-2 text-lg tracking-wide font-semibold font-sans ${nama_produk}`}
                 >
                   {nama_produk || "Pilih Produk"}
@@ -234,8 +229,8 @@ export default function tambahRak() {
                   onValueChange={setProduk}
                 >
                   {transaksi?.map((item, index) => (
-                    <DropdownMenuRadioItem key={index} value={item.namaproduk}>
-                      {item.namaproduk}
+                    <DropdownMenuRadioItem key={index} value={item.produk}>
+                      {item.produk}
                     </DropdownMenuRadioItem>
                   ))}
                 </DropdownMenuRadioGroup>

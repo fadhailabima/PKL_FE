@@ -108,8 +108,15 @@ export default function manageRak() {
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
+                      Kapasitas (Kg)
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
+                    >
                       Status
                     </th>
+
                     <th
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
@@ -128,6 +135,9 @@ export default function manageRak() {
                         {item.idrak}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {item.kapasitas}
+                      </td>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         <Button
                           onClick={() => {
                             const newStatus =
@@ -136,7 +146,11 @@ export default function manageRak() {
                                 : "Tersedia";
                             handleChangeStatus(item.idrak, newStatus);
                           }}
-                          className={item.status === "Tersedia" ? "bg-green-600" : "bg-red-600"}
+                          className={
+                            item.status === "Tersedia"
+                              ? "bg-green-600"
+                              : "bg-red-600"
+                          }
                         >
                           {item.status}
                         </Button>

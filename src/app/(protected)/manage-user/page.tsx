@@ -59,7 +59,9 @@ export default function manageUser() {
     setShowSuccessAlert(true);
     setTimeout(() => {
       getData(localStorage.getItem("token")!);
-    }, 100);
+      setShowSuccessAlert(false); // Set showSuccessAlert to false before redirecting
+      router.push("/manage-user");
+    }, 1000);
   };
 
   const handleChangeStatus = async (id: number, newStatus: string) => {
@@ -119,8 +121,8 @@ export default function manageUser() {
             Select Level
           </option>
           <option value="">All</option>
-          <option value="admin">Admin</option>
-          <option value="karyawan">Petugas</option>
+          <option value="Admin">Admin</option>
+          <option value="Karyawan">Karyawan</option>
         </select>
         <div>
           <Link href="/tambah-user">
@@ -304,16 +306,16 @@ export default function manageUser() {
               {error && (
                 <Alert variant="destructive">
                   <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Gagal Sign Up</AlertTitle>
+                  <AlertTitle>Failed to Delete</AlertTitle>
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
               {showSuccessAlert && (
                 <Alert>
                   <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Sign Up Successful</AlertTitle>
+                  <AlertTitle>Delete Successful</AlertTitle>
                   <AlertDescription>
-                    Your account has been created successfully.
+                    Account has been deleted successfully.
                   </AlertDescription>
                 </Alert>
               )}

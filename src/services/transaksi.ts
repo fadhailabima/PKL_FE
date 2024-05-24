@@ -55,6 +55,7 @@ export type RakSlot = {
   id_rakslot: string;
   id_rak: string;
   kapasitas_maksimal: string;
+  produk: string;
   kapasitas_terpakai: string;
   posisi: string;
   lantai: string;
@@ -91,6 +92,7 @@ export type TransaksiReport = {
   jumlah: string;
   nama_produk: string;
   expired_date: string;
+  kode_produksi: string;
   jenis_transaksi: string;
   rak: Rak;
   rak_slot: RakSlot;
@@ -184,7 +186,7 @@ export const transaksiKeluar = async (
 
 export const getTransaksiReport = async (
   token: string
-): Promise<{ namaproduk: string }[]> => {
+): Promise<{ produk: string }[]> => {
   try {
     const response = await axios.get(
       "http://localhost:8000/api/getAllTransaksiReport",

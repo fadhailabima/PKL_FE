@@ -75,16 +75,14 @@ export default function tambahRak() {
 
         console.log(response.data);
         printTransaksiMasuk(response.data as TransactionData);
-        router.push("/transaksi-masuk");
+        setShowSuccessAlert(true);
+        setTimeout(() => {
+          router.push("/dashboard-karyawan"); // Change route to "/dashboard-karyawan"
+        }, 1500);
       }
     } catch (error: any) {
       setError(error.message);
     }
-
-    setShowSuccessAlert(true);
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
   };
 
   const printTransaksiMasuk = (transactionData: TransactionData | null) => {
@@ -231,7 +229,8 @@ export default function tambahRak() {
             </label>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant={"outline"}
+                <Button
+                  variant={"outline"}
                   className={`w-56 mt-2 mb-2 rounded-lg px-4 py-2 text-lg tracking-wide font-semibold font-sans ${nama_produk}`}
                 >
                   {nama_produk || "Pilih Produk"}

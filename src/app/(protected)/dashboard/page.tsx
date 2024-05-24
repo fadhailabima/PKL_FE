@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -362,7 +364,9 @@ export default function Dashboard() {
     setShowSuccessAlert(true);
     setTimeout(() => {
       ambilData(localStorage.getItem("token")!);
-    }, 100);
+      setShowSuccessAlert(false); // Set showSuccessAlert to false before redirecting
+      router.push("/dashboard");
+    }, 1000);
   };
 
   console.log(transaksi);
@@ -508,18 +512,6 @@ export default function Dashboard() {
                     </th>
                     <th
                       scope="col"
-                      className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
-                    >
-                      Kode Produksi
-                    </th>
-                    <th
-                      scope="col"
-                      className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
-                    >
-                      Tanggal Expired
-                    </th>
-                    <th
-                      scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
                       Tanggal Transaksi
@@ -563,12 +555,6 @@ export default function Dashboard() {
                         {produk.jumlah}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {produk.kode_produksi}
-                      </td>
-                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {produk.tanggal_expired}
-                      </td>
-                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {produk.tanggal_transaksi}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
@@ -607,6 +593,22 @@ export default function Dashboard() {
                   ))}
                 </tbody>
               </table>
+              {error && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Failed to Delete</AlertTitle>
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+              {showSuccessAlert && (
+                <Alert>
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Delete Successful</AlertTitle>
+                  <AlertDescription>
+                    Transaction has been deleted successfully.
+                  </AlertDescription>
+                </Alert>
+              )}
               <div className="flex justify-between items-center mt-2">
                 <Button
                   className="m-2"

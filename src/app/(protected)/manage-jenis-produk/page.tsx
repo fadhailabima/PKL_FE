@@ -61,7 +61,8 @@ export default function manageProduk() {
     setShowSuccessAlert(true);
     setError(false);
     setTimeout(() => {
-        window.location.reload();
+      setShowSuccessAlert(false); // Set showSuccessAlert to false before redirecting
+      router.push("/manage-jenis-produk");
     }, 1000);
   };
 
@@ -149,9 +150,7 @@ export default function manageProduk() {
                             <AlertDialogFooter>
                               <AlertDialogCancel>Cancel</AlertDialogCancel>
                               <AlertDialogAction
-                              onClick={() =>
-                                handleDeleteJenisProduk(item.id)
-                              }
+                                onClick={() => handleDeleteJenisProduk(item.id)}
                               >
                                 Continue
                               </AlertDialogAction>
@@ -193,8 +192,8 @@ export default function manageProduk() {
             {showSuccessAlert && (
               <Alert>
                 <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Berhasil hapus produk</AlertTitle>
-                <AlertDescription>Produk berhasil dihapus</AlertDescription>
+                <AlertTitle>Berhasil hapus jenis produk</AlertTitle>
+                <AlertDescription>Jenis Produk berhasil dihapus</AlertDescription>
               </Alert>
             )}
           </div>

@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 export default function tambahRak() {
-  const [kapasitas_maksimal, setKapasitas] = useState(""); // assuming it's a number
+  const [kapasitas, setKapasitas] = useState(""); // assuming it's a number
   const [error, setError] = useState(null);
   const router = useRouter();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -21,20 +21,17 @@ export default function tambahRak() {
       if (!token) {
         throw new Error("No token found");
       }
-      const res = await addRak(token, kapasitas_maksimal);
+      const res = await addRak(token, kapasitas);
       if (res) {
         console.log("Successfully added Rak");
-        router.push("/tambah-rak");
+        setShowSuccessAlert(true);
+        setTimeout(() => {
+          router.push("/manage-rak"); // Change route to "/manage-rak"
+        }, 1000);
       }
     } catch (error: any) {
       setError(error.message);
     }
-
-    setShowSuccessAlert(true);
-
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
   };
   return (
     <div className="h-250 py-2 flex justify-center items-center">
@@ -52,7 +49,7 @@ export default function tambahRak() {
           </div>
           <div>
             <label className="text-gray-800 font-semibold block my-3 text-md">
-              Kapasitas
+              Kapasitas (Kg)
             </label>
             <Input
               onChange={(e) => setKapasitas(e.target.value)}

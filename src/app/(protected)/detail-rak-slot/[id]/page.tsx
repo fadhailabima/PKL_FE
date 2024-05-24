@@ -94,6 +94,12 @@ export default function DetailRakSlot({
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
+                      Nama Produk
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
+                    >
                       Posisi
                     </th>
                     <th
@@ -106,13 +112,13 @@ export default function DetailRakSlot({
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      Kapasitas Maksimal
+                      Kapasitas Maksimal (Kg)
                     </th>
                     <th
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      Kapasitas Terpakai
+                      Kapasitas Terpakai (Kg)
                     </th>
                     <th
                       scope="col"
@@ -130,6 +136,9 @@ export default function DetailRakSlot({
                     >
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {item.id_rakslot}
+                      </td>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {item.produk}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {item.posisi}

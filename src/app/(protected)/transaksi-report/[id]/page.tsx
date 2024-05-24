@@ -57,19 +57,6 @@ export default function TransaksiReport({
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search..."
         />
-        {/* <select
-          value={filterTerm}
-          onChange={(e) => setFilterTerm(e.target.value)}
-          className="mt-6 border border-gray-300 rounded-lg shadow-sm focus:outline-none text-xs font-medium tracking-wider  text-gray-500 uppercase"
-          style={{ width: "250px", height: "40px" }}
-        >
-          <option value="" disabled selected>
-            Select Status
-          </option>
-          <option value="">All</option>
-          <option value="tersedia">Tersedia</option>
-          <option value="tidak tersedia">Tidak Tersedia</option>
-        </select> */}
         <div></div>
         <div>
           <Link href="/dashboard">
@@ -88,7 +75,7 @@ export default function TransaksiReport({
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      ID Rak 
+                      ID Rak
                     </th>
                     <th
                       scope="col"
@@ -100,7 +87,19 @@ export default function TransaksiReport({
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
-                      Jumlah Kapasitas
+                      Tanggal Kadaluarsa
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
+                    >
+                      Kode Produksi
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
+                    >
+                      Jumlah
                     </th>
                   </tr>
                 </thead>
@@ -115,6 +114,12 @@ export default function TransaksiReport({
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {item.id_rakslot}
+                      </td>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {item.expired_date}
+                      </td>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {item.kode_produksi}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {item.jumlah}
