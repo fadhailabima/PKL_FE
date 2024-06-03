@@ -24,9 +24,10 @@ const Header = () => {
     >
       <div className="flex h-[55px] items-center justify-center px-4">
         <div className="hidden md:block">
-          <span className="font-semibold text-sm text-green-600">
+          <img src="su.png" style={{ width: "100px", height: "100px" }} />
+          {/* <span className="font-semibold text-sm text-green-600">
             PT. SAPROTAN UTAMA NUSANTARA
-          </span>
+          </span> */}
         </div>
       </div>
     </div>

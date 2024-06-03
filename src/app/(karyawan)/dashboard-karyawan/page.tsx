@@ -114,18 +114,6 @@ export default function Dashboard() {
                     </th>
                     <th
                       scope="col"
-                      className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
-                    >
-                      Kode Produksi
-                    </th>
-                    <th
-                      scope="col"
-                      className="text-center py-3 text-xs font-medium tracking-wider text-gray-500 uppercase"
-                    >
-                      Tanggal Expired
-                    </th>
-                    <th
-                      scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
                       Tanggal Transaksi
@@ -158,12 +146,6 @@ export default function Dashboard() {
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {produk.jumlah}
-                      </td>
-                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {produk.kode_produksi}
-                      </td>
-                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {produk.tanggal_expired}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {produk.tanggal_transaksi}

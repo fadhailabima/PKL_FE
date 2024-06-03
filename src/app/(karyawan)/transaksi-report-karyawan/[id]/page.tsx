@@ -87,6 +87,18 @@ export default function TransaksiDetail({
                       scope="col"
                       className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
                     >
+                      Tanggal Kadaluarsa
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
+                    >
+                      Kode Produksi
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-center py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase"
+                    >
                       Jumlah Kapasitas
                     </th>
                   </tr>
@@ -102,6 +114,12 @@ export default function TransaksiDetail({
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {item.id_rakslot}
+                      </td>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {item.expired_date}
+                      </td>
+                      <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {item.kode_produksi}
                       </td>
                       <td className="text-center py-4 text-sm text-gray-500 whitespace-nowrap">
                         {item.jumlah}

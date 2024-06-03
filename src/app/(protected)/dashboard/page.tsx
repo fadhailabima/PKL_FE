@@ -140,9 +140,24 @@ export default function Dashboard() {
         ]) || [],
       theme: "striped",
     });
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getFullYear()}-${(
+      currentDate.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}-${currentDate
+      .getDate()
+      .toString()
+      .padStart(2, "0")}_${currentDate
+      .getHours()
+      .toString()
+      .padStart(2, "0")}${currentDate
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")}`;
 
     // Save the PDF
-    doc.save("RekapTransaksi.pdf");
+    doc.save(`RekapTransaksi_${formattedDate}.pdf`);
   };
 
   const handlePrintRekapMasuk = () => {
@@ -240,9 +255,24 @@ export default function Dashboard() {
             produk.jenis_transaksi,
           ]) || [],
     });
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getFullYear()}-${(
+      currentDate.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}-${currentDate
+      .getDate()
+      .toString()
+      .padStart(2, "0")}_${currentDate
+      .getHours()
+      .toString()
+      .padStart(2, "0")}${currentDate
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")}`;
 
     // Save the PDF
-    doc.save("RekapTransaksiMasuk.pdf");
+    doc.save(`RekapTransaksiMasuk_${formattedDate}.pdf`);
   };
 
   const handlePrintRekapKeluar = () => {
@@ -338,8 +368,23 @@ export default function Dashboard() {
           ]) || [],
     });
 
-    // Save the PDF
-    doc.save("RekapTransaksiKeluar.pdf");
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getFullYear()}-${(
+      currentDate.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}-${currentDate
+      .getDate()
+      .toString()
+      .padStart(2, "0")}_${currentDate
+      .getHours()
+      .toString()
+      .padStart(2, "0")}${currentDate
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")}`;
+
+    doc.save(`RekapTransaksiKeluar_${formattedDate}.pdf`);
   };
 
   const [transaksi, saveData] = useState<Transaksi[] | null>(null);

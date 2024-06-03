@@ -87,7 +87,6 @@ export default function tambahRak() {
 
   const printTransaksiMasuk = (transactionData: TransactionData | null) => {
     const doc = new jsPDF();
-
     autoTable(doc, {
       body: [
         [
@@ -207,7 +206,9 @@ export default function tambahRak() {
       },
     });
 
-    doc.save("LaporanTransaksiMasuk.pdf");
+    doc.save(
+      `LaporanTransaksiMasuk_${transactionData?.transaction.receiptID}.pdf`
+    );
   };
   return (
     <div className="h-250 py-2 flex justify-center items-center">

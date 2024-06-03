@@ -175,7 +175,15 @@ export default function tambahRak() {
     });
 
     autoTable(doc, {
-      head: [["Lokasi Rak", "Rak Slot", "Tanggal Kadaluarsa", "Kode Produksi", "Jumlah"]],
+      head: [
+        [
+          "Lokasi Rak",
+          "Rak Slot",
+          "Tanggal Kadaluarsa",
+          "Kode Produksi",
+          "Jumlah",
+        ],
+      ],
       body: transactionData?.transaction.transaksi_reports
         ? transactionData.transaction.transaksi_reports.map((report) => [
             report.id_rak,
@@ -191,7 +199,9 @@ export default function tambahRak() {
       },
     });
 
-    doc.save("LaporanTransaksiKeluar.pdf");
+    doc.save(
+      `LaporanTransaksiKeluar_${transactionData?.transaction.receiptID}.pdf`
+    );
   };
 
   return (
